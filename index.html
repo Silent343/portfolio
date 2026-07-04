@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gabriel · Ingeniero de Software</title>
+<meta name="description" content="Portafolio de Gabriel — Ingeniero de Software backend y full-stack desde Lima, Perú." />
+
+<!-- ============================================================
+     FUENTES
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   TOKENS DE DISEÑO
+   Paleta "ink & amber": tinta profunda + ámbar (color del gato)
+   con un teal frío para contrastar la parte técnica.
+============================================================ */
+:root{
+  --bg:        #0c0f17;
+  --bg-2:      #121826;
+  --panel:     #161d2e;
+  --ink:       #eef2fb;
+  --muted:     #8a93ab;
+  --faint:     #5b6480;
+  --accent:    #f4934e;   /* ámbar — el gato */
+  --accent-d:  #e0743a;
+  --accent-2:  #56d0c0;   /* teal — lo técnico */
+  --line:      rgba(255,255,255,.08);
+  --line-2:    rgba(255,255,255,.14);
+  --glow:      rgba(244,147,78,.25);
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  --maxw: 1120px;
+  --radius: 16px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+::selection{ background:var(--accent); color:#0c0f17; }
+
+/* Fondo con textura sutil de puntos */
+body::before{
+  content:"";
+  position:fixed; inset:0; z-index:-2;
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(244,147,78,.10), transparent 60%),
+    radial-gradient(900px 700px at -10% 30%, rgba(86,208,192,.07), transparent 55%),
+    var(--bg);
+}
+
+.wrap{ max-width:var(--maxw); margin-inline:auto; padding-inline:24px; }
+
+/* ============================================================
+   NAV
+============================================================ */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 24px;
+  backdrop-filter:blur(10px);
+  background:linear-gradient(180deg, rgba(12,15,23,.85), rgba(12,15,23,.35));
+  border-bottom:1px solid transparent;
+  transition:border-color .3s, background .3s;
+}
+.nav.scrolled{ border-bottom-color:var(--line); background:rgba(12,15,23,.9); }
+.brand{
+  font-family:var(--font-mono);
+  font-weight:600; font-size:15px; letter-spacing:.5px;
+  display:flex; align-items:center; gap:9px;
+}
+.brand .dot{
+  width:9px; height:9px; border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 14px var(--accent);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.4} }
+.nav-links{ display:flex; align-items:center; gap:28px; }
+.nav-links a{
+  font-size:14px; color:var(--muted); font-weight:500;
+  position:relative; transition:color .2s;
+}
+.nav-links a::after{
+  content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0;
+  background:var(--accent); transition:width .25s;
+}
+.nav-links a:hover{ color:var(--ink); }
+.nav-links a:hover::after{ width:100%; }
+
+.lang-toggle{
+  font-family:var(--font-mono); font-size:12px; font-weight:600;
+  display:flex; border:1px solid var(--line-2); border-radius:999px; overflow:hidden;
+}
+.lang-toggle button{
+  background:transparent; color:var(--muted); border:none; cursor:pointer;
+  padding:6px 12px; font:inherit; transition:.2s;
+}
+.lang-toggle button.active{ background:var(--accent); color:#0c0f17; }
+
+.nav-burger{ display:none; background:none; border:none; cursor:pointer; padding:6px; }
+.nav-burger span{ display:block; width:22px; height:2px; background:var(--ink); margin:4px 0; transition:.3s; }
+
+/* ============================================================
+   HERO / BANNER (escena 3D)
+============================================================ */
+.hero{
+  position:relative; min-height:100svh;
+  display:flex; align-items:center;
+  overflow:hidden;
+}
+#cat-canvas{
+  position:absolute; inset:0; width:100%; height:100%;
+  z-index:0;
+}
+.hero-overlay{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(12,15,23,.92) 0%, rgba(12,15,23,.55) 40%, transparent 70%),
+    linear-gradient(0deg, var(--bg) 2%, transparent 30%);
+}
+.hero-content{ position:relative; z-index:2; max-width:640px; }
+.eyebrow{
+  font-family:var(--font-mono); font-size:13px; letter-spacing:1px;
+  color:var(--accent-2); margin-bottom:18px;
+  display:inline-flex; align-items:center; gap:9px;
+}
+.eyebrow::before{ content:""; width:26px; height:1px; background:var(--accent-2); }
+.hero h1{
+  font-family:var(--font-display); font-weight:700;
+  font-size:clamp(2.6rem, 7vw, 4.6rem); line-height:1.02;
+  letter-spacing:-1.5px; margin-bottom:8px;
+}
+.hero h1 .amber{ color:var(--accent); }
+.hero .role{
+  font-family:var(--font-display); font-weight:500;
+  font-size:clamp(1.05rem,2.4vw,1.5rem); color:var(--ink);
+  margin-bottom:20px;
+}
+.hero .tagline{
+  font-size:clamp(1rem,1.6vw,1.15rem); color:var(--muted);
+  max-width:520px; margin-bottom:34px;
+}
+.cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+.btn{
+  font-family:var(--font-display); font-weight:600; font-size:15px;
+  padding:14px 26px; border-radius:999px; cursor:pointer;
+  border:1px solid transparent; transition:transform .18s, box-shadow .25s, background .2s;
+  display:inline-flex; align-items:center; gap:9px;
+}
+.btn-primary{ background:var(--accent); color:#0c0f17; box-shadow:0 8px 30px var(--glow); }
+.btn-primary:hover{ transform:translateY(-3px); box-shadow:0 14px 40px var(--glow); }
+.btn-ghost{ border-color:var(--line-2); color:var(--ink); background:rgba(255,255,255,.02); }
+.btn-ghost:hover{ transform:translateY(-3px); border-color:var(--accent); color:var(--accent); }
+
+.scroll-hint{
+  position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+  z-index:2; font-family:var(--font-mono); font-size:11px; color:var(--faint);
+  letter-spacing:2px; text-transform:uppercase;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.scroll-hint .line{ width:1px; height:34px; background:linear-gradient(var(--faint), transparent); animation:drop 1.8s ease-in-out infinite; }
+@keyframes drop{ 0%{opacity:0; transform:scaleY(.2); transform-origin:top} 50%{opacity:1} 100%{opacity:0; transform:scaleY(1); transform-origin:top} }
+
+.cat-caption{
+  position:absolute; right:26px; bottom:26px; z-index:2;
+  font-family:var(--font-mono); font-size:11px; color:var(--faint);
+  text-align:right; max-width:210px; line-height:1.4;
+}
+
+/* ============================================================
+   SECCIONES GENÉRICAS
+============================================================ */
+section{ padding:110px 0; position:relative; }
+.section-head{ margin-bottom:52px; max-width:620px; }
+.section-tag{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:2px;
+  text-transform:uppercase; color:var(--accent); margin-bottom:14px;
+  display:flex; align-items:center; gap:10px;
+}
+.section-tag .num{ color:var(--faint); }
+.section-head h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:clamp(1.9rem,4.5vw,2.9rem); letter-spacing:-1px; line-height:1.05;
+}
+.section-head p{ color:var(--muted); margin-top:14px; font-size:1.05rem; }
+
+/* ============================================================
+   SOBRE MÍ
+============================================================ */
+.about-grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:48px; align-items:start; }
+.about-text p{ color:var(--muted); font-size:1.08rem; margin-bottom:18px; }
+.about-text strong{ color:var(--ink); font-weight:600; }
+.about-facts{ display:flex; flex-direction:column; gap:2px; }
+.fact{
+  display:flex; justify-content:space-between; gap:16px;
+  padding:16px 0; border-bottom:1px solid var(--line);
+  font-size:.95rem;
+}
+.fact .k{ font-family:var(--font-mono); color:var(--faint); font-size:.82rem; text-transform:uppercase; letter-spacing:1px; }
+.fact .v{ color:var(--ink); text-align:right; font-weight:500; }
+
+/* ============================================================
+   LENGUAJES (tarjetas flotantes)
+============================================================ */
+.lang-grid{
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;
+}
+.lang-card{
+  background:linear-gradient(160deg, var(--panel), var(--bg-2));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:26px 22px;
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  position:relative; overflow:hidden;
+  animation:float 6s ease-in-out infinite;
+  transition:transform .25s, border-color .25s, box-shadow .25s;
+}
+.lang-card:hover{ transform:translateY(-6px) scale(1.02); border-color:var(--line-2); box-shadow:0 18px 40px rgba(0,0,0,.4); }
+.lang-card::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:3px;
+  background:var(--c); opacity:.9;
+}
+.lang-badge{
+  width:58px; height:58px; border-radius:15px;
+  display:grid; place-items:center;
+  font-family:var(--font-mono); font-weight:600; font-size:1.35rem;
+  color:#0c0f17; background:var(--c);
+  box-shadow:0 6px 20px color-mix(in srgb, var(--c) 40%, transparent);
+}
+.lang-card .name{ font-family:var(--font-display); font-weight:600; font-size:1.05rem; }
+.lang-card .use{ font-family:var(--font-mono); font-size:.72rem; color:var(--faint); text-align:center; }
+
+@keyframes float{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-12px) } }
+/* Desfase por tarjeta para que floten en momentos distintos */
+.lang-card:nth-child(1){ animation-delay:0s }
+.lang-card:nth-child(2){ animation-delay:.6s }
+.lang-card:nth-child(3){ animation-delay:1.2s }
+.lang-card:nth-child(4){ animation-delay:1.8s }
+.lang-card:nth-child(5){ animation-delay:.9s }
+.lang-card:nth-child(6){ animation-delay:1.5s }
+.lang-card:nth-child(7){ animation-delay:.3s }
+.lang-card:nth-child(8){ animation-delay:2.1s }
+
+/* ============================================================
+   PROYECTOS
+============================================================ */
+.proj-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
+.proj-card{
+  background:linear-gradient(165deg, var(--panel), var(--bg-2));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:30px 28px;
+  position:relative; overflow:hidden;
+  transition:transform .25s, border-color .25s;
+}
+.proj-card::after{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(500px 200px at var(--mx,50%) var(--my,0%), var(--glow), transparent 60%);
+  opacity:0; transition:opacity .3s; pointer-events:none;
+}
+.proj-card:hover{ transform:translateY(-5px); border-color:var(--line-2); }
+.proj-card:hover::after{ opacity:1; }
+.proj-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.proj-name{ font-family:var(--font-display); font-weight:600; font-size:1.3rem; }
+.proj-idx{ font-family:var(--font-mono); font-size:.8rem; color:var(--faint); }
+.proj-desc{ color:var(--muted); font-size:.98rem; margin-bottom:20px; }
+.proj-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.tag{
+  font-family:var(--font-mono); font-size:.72rem; padding:5px 11px;
+  border-radius:999px; border:1px solid var(--line-2); color:var(--accent-2);
+  background:rgba(86,208,192,.05);
+}
+
+/* ============================================================
+   CONTACTO
+============================================================ */
+.contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
+.contact-intro p{ color:var(--muted); font-size:1.08rem; margin-bottom:28px; }
+.contact-links{ display:flex; flex-direction:column; gap:6px; }
+.clink{
+  display:flex; align-items:center; gap:14px;
+  padding:15px 0; border-bottom:1px solid var(--line);
+  transition:padding .2s, color .2s; color:var(--ink);
+}
+.clink:hover{ padding-left:8px; color:var(--accent); }
+.clink svg{ width:20px; height:20px; flex-shrink:0; }
+.clink .l-label{ font-family:var(--font-mono); font-size:.78rem; color:var(--faint); }
+.clink .l-value{ font-weight:500; }
+
+.form{ display:flex; flex-direction:column; gap:16px; }
+.field label{ font-family:var(--font-mono); font-size:.75rem; letter-spacing:1px; text-transform:uppercase; color:var(--faint); display:block; margin-bottom:7px; }
+.field input, .field textarea{
+  width:100%; background:var(--bg-2); border:1px solid var(--line);
+  border-radius:12px; padding:13px 15px; color:var(--ink);
+  font-family:var(--font-body); font-size:.98rem; transition:border-color .2s, box-shadow .2s;
+}
+.field input:focus, .field textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--glow); }
+.field textarea{ resize:vertical; min-height:120px; }
+.form .btn-primary{ align-self:flex-start; }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer{
+  border-top:1px solid var(--line);
+  padding:40px 0 44px;
+}
+.footer-grid{ display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+.footer-copy{ font-family:var(--font-mono); font-size:.82rem; color:var(--faint); }
+.footer-copy .accent{ color:var(--accent); }
+.footer-social{ display:flex; gap:12px; }
+.footer-social a{
+  width:40px; height:40px; border-radius:50%;
+  display:grid; place-items:center;
+  border:1px solid var(--line-2); color:var(--muted);
+  transition:.2s;
+}
+.footer-social a:hover{ color:var(--accent); border-color:var(--accent); transform:translateY(-3px); }
+.footer-social svg{ width:18px; height:18px; }
+
+/* ============================================================
+   REVEAL AL HACER SCROLL
+============================================================ */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+.reveal.in{ opacity:1; transform:none; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width:900px){
+  .about-grid, .contact-grid{ grid-template-columns:1fr; gap:36px; }
+  .proj-grid{ grid-template-columns:1fr; }
+  .lang-grid{ grid-template-columns:repeat(2,1fr); }
+  .hero-overlay{ background:linear-gradient(0deg, var(--bg) 8%, rgba(12,15,23,.55) 50%, rgba(12,15,23,.2) 100%); }
+  .cat-caption{ display:none; }
+}
+@media (max-width:680px){
+  #cat-canvas{
+    transform:translateY(155px) scale(1.05);
+    transform-origin:center center;
+  }
+  .nav-links{ display:none; }
+  .nav-burger{ display:block; }
+  .nav-links.open{
+    display:flex; flex-direction:column; align-items:flex-start; gap:18px;
+    position:absolute; top:64px; left:0; right:0; padding:22px 24px;
+    background:rgba(12,15,23,.97); border-bottom:1px solid var(--line);
+  }
+  section{ padding:80px 0; }
+}
+
+/* Respeta preferencia de menos animación */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; scroll-behavior:auto; }
+  .reveal{ opacity:1; transform:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================ NAV ============================================================ -->
+<nav class="nav" id="nav">
+  <a href="#top" class="brand"><span class="dot"></span>gabriel<span style="color:var(--faint)">.dev</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="#about" data-i18n="nav.about">Sobre mí</a>
+    <a href="#langs" data-i18n="nav.langs">Lenguajes</a>
+    <a href="#projects" data-i18n="nav.projects">Proyectos</a>
+    <a href="#contact" data-i18n="nav.contact">Contacto</a>
+    <div class="lang-toggle">
+      <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+  <button class="nav-burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ============================================================ HERO ============================================================ -->
+<header class="hero" id="top">
+  <canvas id="cat-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="wrap hero-content">
+    <span class="eyebrow" data-i18n="hero.eyebrow">Lima, Perú · Disponible para proyectos</span>
+    <h1 data-i18n="hero.hi">Hola, soy <span class="amber">Gabriel</span></h1>
+    <div class="role" data-i18n="hero.role">Ingeniero de Software · Backend &amp; Full-Stack</div>
+    <p class="tagline" data-i18n="hero.tagline">Construyo productos SaaS con arquitectura limpia — Spring Boot, Angular y FastAPI — desde Lima para toda LATAM.</p>
+    <div class="cta-row">
+      <a href="#projects" class="btn btn-primary" data-i18n="hero.cta1">Ver proyectos →</a>
+      <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Contáctame</a>
+    </div>
+  </div>
+  <div class="cat-caption" data-i18n="hero.catcap">psst… mira al gato. A veces se aburre, se baja de la laptop y se va a dar una vuelta.</div>
+  <div class="scroll-hint"><span data-i18n="hero.scroll">scroll</span><span class="line"></span></div>
+</header>
+
+<!-- ============================================================ SOBRE MÍ ============================================================ -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag"><span class="num">01</span><span data-i18n="about.tag">Sobre mí</span></div>
+      <h2 data-i18n="about.title">Ingeniería con criterio, no solo código</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p data-i18n="about.p1">Soy estudiante de <strong>Ingeniería de Software en la UPC</strong> (Lima, Perú) y desarrollador freelance. Diseño y construyo productos SaaS aplicando <strong>DDD, Clean Architecture</strong> y principios <strong>SOLID</strong> sobre un monolito modular.</p>
+        <p data-i18n="about.p2">Mi terreno favorito es el <strong>backend robusto</strong> — Spring Boot / Java 21 y FastAPI — conectado a frontends modernos en <strong>Angular 21</strong> y Flutter. Le tengo cariño especial a los gráficos 3D con Three.js y a la matemática financiera aplicada al mercado peruano (SUNAT, SBS, valorización de bonos).</p>
+      </div>
+      <div class="about-facts reveal">
+        <div class="fact"><span class="k" data-i18n="about.k1">Ubicación</span><span class="v" data-i18n="about.v1">Lima, Perú</span></div>
+        <div class="fact"><span class="k" data-i18n="about.k2">Enfoque</span><span class="v" data-i18n="about.v2">Backend &amp; Full-Stack</span></div>
+        <div class="fact"><span class="k" data-i18n="about.k3">Arquitectura</span><span class="v" data-i18n="about.v3">DDD · Clean · SOLID</span></div>
+        <div class="fact"><span class="k" data-i18n="about.k4">Modalidad</span><span class="v" data-i18n="about.v4">Freelance · Remoto</span></div>
+        <div class="fact"><span class="k" data-i18n="about.k5">Mercado</span><span class="v" data-i18n="about.v5">Perú · LATAM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ LENGUAJES ============================================================ -->
+<section id="langs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag"><span class="num">02</span><span data-i18n="langs.tag">Lenguajes</span></div>
+      <h2 data-i18n="langs.title">Los lenguajes con los que trabajo</h2>
+      <p data-i18n="langs.sub">Del backend fuertemente tipado al scripting de datos y la UI móvil.</p>
+    </div>
+    <div class="lang-grid" id="langGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ PROYECTOS ============================================================ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag"><span class="num">03</span><span data-i18n="projects.tag">Proyectos</span></div>
+      <h2 data-i18n="projects.title">Cosas que he construido</h2>
+      <p data-i18n="projects.sub">Una selección de productos y prototipos, del backend al IoT.</p>
+    </div>
+    <div class="proj-grid" id="projGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ CONTACTO ============================================================ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag"><span class="num">04</span><span data-i18n="contact.tag">Contacto</span></div>
+      <h2 data-i18n="contact.title">Trabajemos juntos</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-intro reveal">
+        <p data-i18n="contact.intro">¿Tienes una idea de producto o un proyecto que necesita arquitectura seria? Escríbeme y conversamos. Respondo rápido.</p>
+        <div class="contact-links">
+          <a class="clink" id="link-github" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.34c.85 0 1.71.12 2.5.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>
+            <span><span class="l-label">GitHub</span><br><span class="l-value" id="v-github">github.com/tu-usuario</span></span>
+          </a>
+          <a class="clink" id="link-email" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            <span><span class="l-label">Email</span><br><span class="l-value" id="v-email">tu-correo@ejemplo.com</span></span>
+          </a>
+          <a class="clink" id="link-linkedin" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.64h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21H9V9Z"/></svg>
+            <span><span class="l-label">LinkedIn</span><br><span class="l-value" id="v-linkedin">linkedin.com/in/tu-usuario</span></span>
+          </a>
+          <a class="clink" id="link-workana" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+            <span><span class="l-label">Workana</span><br><span class="l-value" id="v-workana">workana.com/freelancer/tu-usuario</span></span>
+          </a>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="form">
+          <div class="field">
+            <label for="f-name" data-i18n="form.name">Nombre</label>
+            <input id="f-name" type="text" placeholder="Tu nombre" />
+          </div>
+          <div class="field">
+            <label for="f-email" data-i18n="form.email">Correo</label>
+            <input id="f-email" type="email" placeholder="tucorreo@ejemplo.com" />
+          </div>
+          <div class="field">
+            <label for="f-msg" data-i18n="form.msg">Mensaje</label>
+            <textarea id="f-msg" placeholder="Cuéntame de tu proyecto…"></textarea>
+          </div>
+          <button class="btn btn-primary" id="sendBtn" data-i18n="form.send">Enviar mensaje →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ FOOTER ============================================================ -->
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-copy">© <span id="year"></span> Gabriel · <span data-i18n="footer.made">Hecho con</span> <span class="accent">☕</span> <span data-i18n="footer.and">y</span> Three.js · <span data-i18n="footer.rights">Todos los derechos reservados.</span><br><span class="footer-credit" style="opacity:.75"><span data-i18n="footer.catcredit">Gato 3D: “Toon Cat FREE” de</span> <a href="https://sketchfab.com/omabuarts" target="_blank" rel="noopener" style="text-decoration:underline">Omabuarts Studio</a> · <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="text-decoration:underline">CC BY 4.0</a></span></div>
+    <div class="footer-social">
+      <a id="fs-github" href="#" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.34c.85 0 1.71.12 2.5.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.59.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg></a>
+      <a id="fs-email" href="#" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+      <a id="fs-linkedin" href="#" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.64h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21H9V9Z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================ THREE.JS ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<script>
+/* ============================================================
+   1) CONFIG  —  👇 GABRIEL: CAMBIA ESTO POR TUS LINKS REALES
+   ------------------------------------------------------------
+   No tenía tus URLs exactas, así que dejé placeholders.
+   Reemplaza los valores de abajo y todo se actualiza solo.
+============================================================ */
+const CONFIG = {
+  fullName: "Gabriel",
+  github:   "https://github.com/tu-usuario",
+  email:    "tu-correo@ejemplo.com",
+  linkedin: "https://linkedin.com/in/tu-usuario",
+  workana:  "https://www.workana.com/freelancer/tu-usuario",
+};
+
+/* ============================================================
+   2) I18N  —  Español / Inglés
+============================================================ */
+const I18N = {
+  es:{
+    "nav.about":"Sobre mí","nav.langs":"Lenguajes","nav.projects":"Proyectos","nav.contact":"Contacto",
+    "hero.eyebrow":"Lima, Perú · Disponible para proyectos",
+    "hero.hi":"Hola, soy <span class='amber'>Gabriel</span>",
+    "hero.role":"Ingeniero de Software · Backend &amp; Full-Stack",
+    "hero.tagline":"Construyo productos SaaS con arquitectura limpia — Spring Boot, Angular y FastAPI — desde Lima para toda LATAM.",
+    "hero.cta1":"Ver proyectos →","hero.cta2":"Contáctame",
+    "hero.catcap":"psst… mira al gato. A veces se aburre, se baja de la laptop y se va a dar una vuelta.",
+    "hero.scroll":"scroll",
+    "about.tag":"Sobre mí","about.title":"Ingeniería con criterio, no solo código",
+    "about.p1":"Soy estudiante de <strong>Ingeniería de Software en la UPC</strong> (Lima, Perú) y desarrollador freelance. Diseño y construyo productos SaaS aplicando <strong>DDD, Clean Architecture</strong> y principios <strong>SOLID</strong> sobre un monolito modular.",
+    "about.p2":"Mi terreno favorito es el <strong>backend robusto</strong> — Spring Boot / Java 21 y FastAPI — conectado a frontends modernos en <strong>Angular 21</strong> y Flutter. Le tengo cariño especial a los gráficos 3D con Three.js y a la matemática financiera aplicada al mercado peruano (SUNAT, SBS, valorización de bonos).",
+    "about.k1":"Ubicación","about.v1":"Lima, Perú",
+    "about.k2":"Enfoque","about.v2":"Backend &amp; Full-Stack",
+    "about.k3":"Arquitectura","about.v3":"DDD · Clean · SOLID",
+    "about.k4":"Modalidad","about.v4":"Freelance · Remoto",
+    "about.k5":"Mercado","about.v5":"Perú · LATAM",
+    "langs.tag":"Lenguajes","langs.title":"Los lenguajes con los que trabajo",
+    "langs.sub":"Del backend fuertemente tipado al scripting de datos y la UI móvil.",
+    "projects.tag":"Proyectos","projects.title":"Cosas que he construido",
+    "projects.sub":"Una selección de productos y prototipos, del backend al IoT.",
+    "contact.tag":"Contacto","contact.title":"Trabajemos juntos",
+    "contact.intro":"¿Tienes una idea de producto o un proyecto que necesita arquitectura seria? Escríbeme y conversamos. Respondo rápido.",
+    "form.name":"Nombre","form.email":"Correo","form.msg":"Mensaje","form.send":"Enviar mensaje →",
+    "footer.made":"Hecho con","footer.and":"y","footer.rights":"Todos los derechos reservados.",
+    "footer.catcredit":"Gato 3D: “Toon Cat FREE” de",
+  },
+  en:{
+    "nav.about":"About","nav.langs":"Languages","nav.projects":"Projects","nav.contact":"Contact",
+    "hero.eyebrow":"Lima, Peru · Available for projects",
+    "hero.hi":"Hi, I'm <span class='amber'>Gabriel</span>",
+    "hero.role":"Software Engineer · Backend &amp; Full-Stack",
+    "hero.tagline":"I build SaaS products with clean architecture — Spring Boot, Angular and FastAPI — from Lima for all of LATAM.",
+    "hero.cta1":"View projects →","hero.cta2":"Get in touch",
+    "hero.catcap":"psst… watch the cat. Sometimes it gets bored, hops off the laptop and wanders off.",
+    "hero.scroll":"scroll",
+    "about.tag":"About","about.title":"Engineering with judgment, not just code",
+    "about.p1":"I'm a <strong>Software Engineering student at UPC</strong> (Lima, Peru) and a freelance developer. I design and build SaaS products applying <strong>DDD, Clean Architecture</strong> and <strong>SOLID</strong> principles on a modular monolith.",
+    "about.p2":"My favorite ground is the <strong>robust backend</strong> — Spring Boot / Java 21 and FastAPI — wired to modern frontends in <strong>Angular 21</strong> and Flutter. I have a soft spot for 3D graphics with Three.js and financial math for the Peruvian market (SUNAT, SBS, bond valuation).",
+    "about.k1":"Location","about.v1":"Lima, Peru",
+    "about.k2":"Focus","about.v2":"Backend &amp; Full-Stack",
+    "about.k3":"Architecture","about.v3":"DDD · Clean · SOLID",
+    "about.k4":"Mode","about.v4":"Freelance · Remote",
+    "about.k5":"Market","about.v5":"Peru · LATAM",
+    "langs.tag":"Languages","langs.title":"The languages I work with",
+    "langs.sub":"From strongly-typed backends to data scripting and mobile UI.",
+    "projects.tag":"Projects","projects.title":"Things I've built",
+    "projects.sub":"A selection of products and prototypes, from backend to IoT.",
+    "contact.tag":"Contact","contact.title":"Let's work together",
+    "contact.intro":"Got a product idea or a project that needs serious architecture? Drop me a line and let's talk. I reply fast.",
+    "form.name":"Name","form.email":"Email","form.msg":"Message","form.send":"Send message →",
+    "footer.made":"Made with","footer.and":"and","footer.rights":"All rights reserved.",
+    "footer.catcredit":"3D cat: “Toon Cat FREE” by",
+  }
+};
+
+/* ============================================================
+   3) DATOS: lenguajes y proyectos (bilingüe)
+============================================================ */
+const LANGS = [
+  { name:"Java",       mono:"Jv", color:"#e76f00", use:{es:"Spring Boot · Java 21", en:"Spring Boot · Java 21"} },
+  { name:"TypeScript", mono:"Ts", color:"#3178c6", use:{es:"Angular · Node", en:"Angular · Node"} },
+  { name:"JavaScript", mono:"Js", color:"#e8c020", use:{es:"Three.js · Vanilla", en:"Three.js · Vanilla"} },
+  { name:"Python",     mono:"Py", color:"#4b8bbe", use:{es:"FastAPI · IA", en:"FastAPI · AI"} },
+  { name:"Dart",       mono:"Dt", color:"#2ba9df", use:{es:"Flutter", en:"Flutter"} },
+  { name:"SQL",        mono:"Sql",color:"#5a94c4", use:{es:"PostgreSQL · Flyway", en:"PostgreSQL · Flyway"} },
+  { name:"HTML5",      mono:"<>", color:"#e06a3b", use:{es:"Semántica · A11y", en:"Semantics · A11y"} },
+  { name:"CSS3",       mono:"#",  color:"#38a0dd", use:{es:"Animaciones · UI", en:"Animations · UI"} },
+];
+
+const PROJECTS = [
+  { name:"Amora", tags:["Spring Boot","Three.js","DDD"],
+    desc:{es:"App para parejas (Perú/LATAM). Monolito modular con 6 bounded contexts, cosmos 3D en Three.js y mascotas Sol & Luna.",
+          en:"Couples app (Peru/LATAM). Modular monolith with 6 bounded contexts, a 3D Three.js cosmos and Sol & Luna mascots."} },
+  { name:"Guardian", tags:["Spring Boot","WebSocket","Angular"],
+    desc:{es:"Plataforma antirrobo para Android. 7 bounded contexts, comandos WebSocket-first con fallback FCM y consola de telemetría.",
+          en:"Android anti-theft platform. 7 bounded contexts, WebSocket-first commands with FCM fallback and a telemetry console."} },
+  { name:"FinancePE", tags:["Java","Finanzas","Newton-Raphson"],
+    desc:{es:"Motor de amortización francesa con TCEA/TIR vía Newton-Raphson, ajustado a las reglas del mercado peruano.",
+          en:"French amortization engine with TCEA/IRR via Newton-Raphson, tuned to Peruvian market rules."} },
+  { name:"DocFlow", tags:["FastAPI","IA","SUNAT"],
+    desc:{es:"Extractor inteligente de documentos con reglas SUNAT (RUC módulo-11, IGV 18%), validado con facturas reales.",
+          en:"Intelligent document extractor with SUNAT rules (RUC mod-11, 18% IGV), validated on real invoices."} },
+  { name:"AuditFlow", tags:["Spring Boot","Claude API","Angular"],
+    desc:{es:"Analizador de repos de GitHub con IA: puntúa Arquitectura, SOLID, Seguridad y Performance.",
+          en:"AI-powered GitHub repo analyzer: scores Architecture, SOLID, Security and Performance."} },
+  { name:"MineGuard", tags:["ESP32","FreeRTOS","IoT"],
+    desc:{es:"Prototipo IoT con ESP32 y FreeRTOS: arquitectura orientada a eventos, 4 sensores y captura por ISR.",
+          en:"IoT prototype with ESP32 and FreeRTOS: event-driven architecture, 4 sensors and ISR-based capture."} },
+  { name:"PixelRoom", tags:["WebSocket","STOMP","Angular"],
+    desc:{es:"Pixel art colaborativo en tiempo real con WebSocket/STOMP y estado compartido.",
+          en:"Real-time collaborative pixel art with WebSocket/STOMP and shared state."} },
+  { name:"SmartDrive", tags:["Spring Boot","Angular","IA"],
+    desc:{es:"Simulador de crédito vehicular con indicadores SBS (VAN, TIR, TCEA) y asesor IA. Render + Vercel.",
+          en:"Auto-loan simulator with SBS indicators (NPV, IRR, TCEA) and an AI advisor. Render + Vercel."} },
+];
+
+/* ============================================================
+   4) RENDER + I18N + INTERACCIÓN
+============================================================ */
+let currentLang = "es";
+
+function applyLinks(){
+  document.getElementById("v-github").textContent   = CONFIG.github.replace(/^https?:\/\//,"");
+  document.getElementById("v-email").textContent    = CONFIG.email;
+  document.getElementById("v-linkedin").textContent = CONFIG.linkedin.replace(/^https?:\/\//,"");
+  document.getElementById("v-workana").textContent  = CONFIG.workana.replace(/^https?:\/\//,"");
+  document.getElementById("link-github").href   = CONFIG.github;
+  document.getElementById("link-email").href    = "mailto:" + CONFIG.email;
+  document.getElementById("link-linkedin").href = CONFIG.linkedin;
+  document.getElementById("link-workana").href  = CONFIG.workana;
+  document.getElementById("fs-github").href   = CONFIG.github;
+  document.getElementById("fs-email").href    = "mailto:" + CONFIG.email;
+  document.getElementById("fs-linkedin").href = CONFIG.linkedin;
+}
+
+function renderLangs(){
+  const grid = document.getElementById("langGrid");
+  grid.innerHTML = LANGS.map(l => `
+    <div class="lang-card" style="--c:${l.color}">
+      <div class="lang-badge">${l.mono}</div>
+      <div class="name">${l.name}</div>
+      <div class="use">${l.use[currentLang]}</div>
+    </div>`).join("");
+}
+
+function renderProjects(){
+  const grid = document.getElementById("projGrid");
+  grid.innerHTML = PROJECTS.map((p,i) => `
+    <article class="proj-card reveal" data-idx="${i}">
+      <div class="proj-top">
+        <span class="proj-name">${p.name}</span>
+        <span class="proj-idx">/${String(i+1).padStart(2,"0")}</span>
+      </div>
+      <p class="proj-desc">${p.desc[currentLang]}</p>
+      <div class="proj-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+    </article>`).join("");
+  // glow que sigue el cursor
+  grid.querySelectorAll(".proj-card").forEach(card=>{
+    card.addEventListener("mousemove",e=>{
+      const r=card.getBoundingClientRect();
+      card.style.setProperty("--mx",`${e.clientX-r.left}px`);
+      card.style.setProperty("--my",`${e.clientY-r.top}px`);
+    });
+  });
+  observeReveals();
+}
+
+function setLang(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key = el.getAttribute("data-i18n");
+    if(I18N[lang][key] !== undefined) el.innerHTML = I18N[lang][key];
+  });
+  document.getElementById("btn-es").classList.toggle("active", lang==="es");
+  document.getElementById("btn-en").classList.toggle("active", lang==="en");
+  renderLangs();
+  renderProjects();
+}
+
+/* Reveal al hacer scroll */
+let revObserver;
+function observeReveals(){
+  if(!revObserver){
+    revObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); revObserver.unobserve(en.target);} });
+    },{ threshold:.14 });
+  }
+  document.querySelectorAll(".reveal:not(.in)").forEach(el=>revObserver.observe(el));
+}
+
+/* Nav: scrolled, burger, contacto */
+function initUI(){
+  document.getElementById("year").textContent = new Date().getFullYear();
+  const nav = document.getElementById("nav");
+  window.addEventListener("scroll",()=> nav.classList.toggle("scrolled", window.scrollY>30));
+  const burger = document.getElementById("burger");
+  const links = document.getElementById("navLinks");
+  burger.addEventListener("click",()=> links.classList.toggle("open"));
+  links.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>links.classList.remove("open")));
+
+  document.getElementById("sendBtn").addEventListener("click",()=>{
+    const n=document.getElementById("f-name").value.trim();
+    const e=document.getElementById("f-email").value.trim();
+    const m=document.getElementById("f-msg").value.trim();
+    const subj = encodeURIComponent(`Contacto portafolio — ${n||"sin nombre"}`);
+    const body = encodeURIComponent(`${m}\n\n— ${n}\n${e}`);
+    window.location.href = `mailto:${CONFIG.email}?subject=${subj}&body=${body}`;
+  });
+}
+
+applyLinks();
+setLang("es");
+initUI();
+observeReveals();
+
+/* ============================================================
+   5) ESCENA 3D — el gato en la laptop (v5, modelo GLB real)
+   ------------------------------------------------------------
+   Gato: "Toon Cat FREE" de Omabuarts Studio (CC-BY-4.0)
+   https://sketchfab.com/3d-models/toon-cat-free-b2bd1ee7858444bda366110a2d960386
+   Crédito obligatorio: ya incluido en el footer. Si mueves el
+   modelo de sitio, conserva esa línea.
+   ------------------------------------------------------------
+   - Modelo .glb con esqueleto real (36 huesos): cola de 5
+     segmentos, 4 patas articuladas, orejas, ojos, columna.
+   - Re-coloreado por shader a gris atigrado: rayas negras en el
+     lomo, patitas blancas, pecho claro y punta de cola blanca.
+     (Usa la pose de bind, así las marcas no "nadan" al animar.)
+   - Animación 100% procedural sobre los huesos: caminata
+     diagonal, echarse con patas recogidas, cola con latigazos
+     ocasionales, orejas, parpadeo (escala de los huesos de ojo)
+     y respiración.
+   Ciclo: LYING -> STAND -> WALK_OFF -> WALK_BACK -> CLIMB
+   (sin pausa fuera de pantalla: reaparece por el lado opuesto)
+============================================================ */
+(function(){
+  const canvas = document.getElementById("cat-canvas");
+  if(!canvas || !window.THREE) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Fuentes del modelo: primero local (recomendado para producción:
+     descarga cat.glb junto a este HTML), luego el mirror en GitHub. */
+  const MODEL_URLS = [
+    "cat.glb",
+    "https://raw.githubusercontent.com/DevTakao/threejs-cat/HEAD/assets/models/toon_cat_free.glb"
+  ];
+
+  const scene = new THREE.Scene();
+  const stage = new THREE.Group();
+  stage.scale.setScalar(0.78);
+  scene.add(stage);
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(1.0, 1.35, 6.1);
+  camera.lookAt(0, 0.55, 0);
+  let sceneX = 2.15;
+
+  function computeSceneX(){
+    const w = canvas.clientWidth || window.innerWidth;
+    if(w < 680) return 0.05;
+    if(w < 980) return 0.85;
+    return 2.15;
+  }
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, preserveDrawingBuffer:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.22;
+
+  function sizeNow(){
+    const w = canvas.clientWidth  || window.innerWidth;
+    const h = canvas.clientHeight || window.innerHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  sizeNow();
+  window.addEventListener("resize", sizeNow);
+
+  /* --- Luz cinematográfica: cálida al frente, fría de fondo --- */
+  scene.add(new THREE.AmbientLight(0x3a4560, 0.55));
+  scene.add(new THREE.HemisphereLight(0xffe4c4, 0x0e1220, 0.42));
+  const key = new THREE.DirectionalLight(0xffc27a, 1.7);
+  key.position.set(5, 5.5, 6);
+  key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.radius = 7;
+  key.shadow.camera.left=-8; key.shadow.camera.right=8;
+  key.shadow.camera.top=8; key.shadow.camera.bottom=-8;
+  key.shadow.bias = -0.0004;
+  scene.add(key);
+  const warm = new THREE.PointLight(0xff9a42, 1.3, 14, 2);
+  warm.position.set(1.8, 1.7, 2.6);
+  scene.add(warm);
+  const coolRim = new THREE.DirectionalLight(0x5a8fce, 0.75);
+  coolRim.position.set(-6, 3, -4);
+  scene.add(coolRim);
+
+  /* --- Utilidad canvas --- */
+  function roundRect(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+
+  function woodTexture(){
+    const c=document.createElement("canvas"); c.width=512; c.height=256;
+    const g=c.getContext("2d");
+    const grd=g.createLinearGradient(0,0,512,256);
+    grd.addColorStop(0,"#452110"); grd.addColorStop(0.42,"#8d431e"); grd.addColorStop(1,"#28130c");
+    g.fillStyle=grd; g.fillRect(0,0,512,256);
+    for(let y=22;y<256;y+=35){
+      g.strokeStyle="rgba(255,184,96,.12)"; g.lineWidth=2;
+      g.beginPath(); g.moveTo(0,y);
+      for(let x=0;x<512;x+=42) g.quadraticCurveTo(x+22,y+Math.sin(x*.04)*8,x+42,y);
+      g.stroke();
+    }
+    for(let i=0;i<80;i++){
+      g.globalAlpha=.08+Math.random()*.1; g.strokeStyle="#ffc071";
+      const y=Math.random()*256;
+      g.beginPath(); g.moveTo(0,y); g.lineTo(512,y+Math.random()*18-9); g.stroke();
+    }
+    g.globalAlpha=1;
+    const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(3.5,1); t.encoding=THREE.sRGBEncoding; return t;
+  }
+  function brushedMetalTexture(){
+    const c=document.createElement("canvas"); c.width=256; c.height=256;
+    const g=c.getContext("2d");
+    g.fillStyle="#283040"; g.fillRect(0,0,256,256);
+    for(let y=0;y<256;y++){
+      g.globalAlpha=.08+Math.random()*.12;
+      g.strokeStyle = y%5===0 ? "#6d7689" : "#1c2330";
+      g.beginPath(); g.moveTo(0,y); g.lineTo(256,y+Math.random()*1.5); g.stroke();
+    }
+    g.globalAlpha=1;
+    const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(2.4,1.2); t.encoding=THREE.sRGBEncoding; return t;
+  }
+  const metalMap = brushedMetalTexture();
+
+  /* --- Escritorio --- */
+  const desk = new THREE.Mesh(
+    new THREE.BoxGeometry(26, 0.4, 8),
+    new THREE.MeshStandardMaterial({ map:woodTexture(), color:0x9b5127, roughness:0.88, metalness:0.02 })
+  );
+  desk.position.y = -0.2; desk.receiveShadow = true; scene.add(desk);
+
+  /* --- Laptop --- */
+  const laptop = new THREE.Group();
+  const aluMat = new THREE.MeshStandardMaterial({ map:metalMap, color:0x343d4e, roughness:0.38, metalness:0.78, bumpMap:metalMap, bumpScale:0.01 });
+
+  const base = new THREE.Mesh(new THREE.BoxGeometry(2.15, 0.14, 1.5), aluMat);
+  base.position.y = 0.09; base.castShadow = true; base.receiveShadow = true; laptop.add(base);
+  const deck = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.02, 1.38), new THREE.MeshStandardMaterial({ map:metalMap, color:0x404a5f, roughness:0.42, metalness:0.62, bumpMap:metalMap, bumpScale:0.006 }));
+  deck.position.y = 0.161; laptop.add(deck);
+
+  function keebTexture(){
+    const c=document.createElement("canvas"); c.width=256; c.height=150;
+    const g=c.getContext("2d");
+    g.fillStyle="#141a26"; g.fillRect(0,0,256,150);
+    g.fillStyle="#2b3242";
+    const cols=14, rows=5, kw=15, kh=21, gap=3, ox=8, oy=6;
+    for(let r=0;r<rows;r++)for(let cc=0;cc<cols;cc++){ roundRect(g,ox+cc*(kw+gap),oy+r*(kh+gap),kw,kh,3); g.fill(); }
+    roundRect(g,72,oy+5*(kh+gap)-1,108,17,3); g.fill();
+    const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding; return t;
+  }
+  const keeb = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 0.82), new THREE.MeshStandardMaterial({ map:keebTexture(), roughness:0.7 }));
+  keeb.rotation.x = -Math.PI/2; keeb.position.set(0, 0.172, -0.12); laptop.add(keeb);
+  const pad = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.4), new THREE.MeshStandardMaterial({ color:0x394152, roughness:0.3, metalness:0.5 }));
+  pad.rotation.x = -Math.PI/2; pad.position.set(0, 0.172, 0.46); laptop.add(pad);
+
+  function screenTexture(){
+    const c=document.createElement("canvas"); c.width=512; c.height=320;
+    const g=c.getContext("2d");
+    const grd=g.createLinearGradient(0,0,512,320);
+    grd.addColorStop(0,"#07131d"); grd.addColorStop(0.5,"#0d1825"); grd.addColorStop(1,"#04101a");
+    g.fillStyle=grd; g.fillRect(0,0,512,320);
+    g.fillStyle="#172336"; g.fillRect(0,0,512,34);
+    ["#ff5f56","#ffbd2e","#27c93f"].forEach((col,i)=>{ g.fillStyle=col; g.beginPath(); g.arc(22+i*22,17,6,0,7); g.fill(); });
+    const palette=["#7ee787","#79c0ff","#ffa657","#d2a8ff","#a5d6ff","#f0883e","#8b949e"];
+    let y=58;
+    for(let row=0; row<16; row++){
+      let x=24 + (Math.floor(Math.random()*3))*22;
+      const segs=2+Math.floor(Math.random()*4);
+      for(let s=0;s<segs;s++){
+        const w=20+Math.random()*90;
+        g.fillStyle=palette[Math.floor(Math.random()*palette.length)]; g.globalAlpha=0.92;
+        g.fillRect(x,y,w,9); x+=w+12; if(x>470) break;
+      }
+      y+=16;
+    }
+    g.globalAlpha=.16;
+    const shine=g.createLinearGradient(90,0,420,320);
+    shine.addColorStop(0,"rgba(255,255,255,0)");
+    shine.addColorStop(.48,"rgba(255,255,255,.42)");
+    shine.addColorStop(1,"rgba(255,255,255,0)");
+    g.fillStyle=shine; g.fillRect(0,0,512,320);
+    g.globalAlpha=1;
+    const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding; return t;
+  }
+  function screenOffTexture(){
+    const c=document.createElement("canvas"); c.width=512; c.height=320;
+    const g=c.getContext("2d");
+    const grd=g.createLinearGradient(0,0,512,320);
+    grd.addColorStop(0,"#05070b"); grd.addColorStop(.48,"#111722"); grd.addColorStop(1,"#030407");
+    g.fillStyle=grd; g.fillRect(0,0,512,320);
+    g.globalAlpha=.075;
+    g.fillStyle="#fff6df"; g.beginPath(); g.ellipse(210,118,170,18,-.35,0,Math.PI*2); g.fill();
+    g.globalAlpha=.035;
+    g.strokeStyle="#9bd6ff"; g.lineWidth=3; g.beginPath(); g.moveTo(36,276); g.lineTo(470,56); g.stroke();
+    g.globalAlpha=1;
+    const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding; return t;
+  }
+  const scrTex = screenTexture();
+  const scrOffTex = screenOffTexture();
+  const screenOffMat = new THREE.MeshBasicMaterial({ map:scrOffTex });
+  const screenOnMat = new THREE.MeshStandardMaterial({
+    map:scrTex, emissiveMap:scrTex, emissive:0x9bf5e8, emissiveIntensity:0,
+    roughness:0.28, transparent:true, opacity:0
+  });
+  const hinge = new THREE.Group();
+  hinge.position.set(0, 0.14, -0.72);
+  const lid = new THREE.Mesh(new THREE.BoxGeometry(2.15, 1.4, 0.07), aluMat);
+  lid.position.y = 0.7; lid.castShadow = true;
+  const scrOff = new THREE.Mesh(new THREE.PlaneGeometry(1.94, 1.2), screenOffMat);
+  scrOff.position.set(0, 0.7, 0.048);
+  const scr = new THREE.Mesh(new THREE.PlaneGeometry(1.94, 1.2), screenOnMat);
+  scr.position.set(0, 0.7, 0.052);
+  const screenGlow = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.2, 1.44),
+    new THREE.MeshBasicMaterial({ color:0x56d0c0, transparent:true, opacity:0, depthWrite:false, blending:THREE.AdditiveBlending })
+  );
+  screenGlow.position.set(0, 0.7, 0.06);
+  hinge.add(lid); hinge.add(scrOff); hinge.add(scr); hinge.add(screenGlow);
+  hinge.rotation.x = -0.32; laptop.add(hinge);
+  const screenLight = new THREE.PointLight(0x56d0c0, 0, 7, 2);
+  screenLight.position.set(0, 0.9, -0.2); laptop.add(screenLight);
+  const powerLedMat = new THREE.MeshBasicMaterial({ color:0x162020 });
+  const powerLed = new THREE.Mesh(new THREE.SphereGeometry(0.024, 12, 8), powerLedMat);
+  powerLed.position.set(0.92, 0.188, 0.58); laptop.add(powerLed);
+  stage.add(laptop);
+  function applySceneLayout(){
+    sceneX = computeSceneX();
+    stage.position.x = sceneX;
+  }
+  applySceneLayout();
+  window.addEventListener("resize", applySceneLayout);
+
+  /* --- Sombra "blob" --- */
+  const shTex = (function(){
+    const c=document.createElement("canvas"); c.width=128; c.height=128;
+    const g=c.getContext("2d");
+    const grd=g.createRadialGradient(64,64,4,64,64,60);
+    grd.addColorStop(0,"rgba(0,0,0,0.6)"); grd.addColorStop(1,"rgba(0,0,0,0)");
+    g.fillStyle=grd; g.fillRect(0,0,128,128);
+    return new THREE.CanvasTexture(c);
+  })();
+  const blob = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.15), new THREE.MeshBasicMaterial({ map:shTex, transparent:true, depthWrite:false, opacity:0 }));
+  blob.rotation.x = -Math.PI/2; stage.add(blob);
+
+  /* ============================================================
+     GATO — carga del GLB + rig
+     Bind pose del modelo: mira a +Z, largo 5.77u, patas en y=0,
+     alto 3.7u. Lo rotamos para que mire a +X y lo escalamos.
+  ============================================================ */
+  const CAT_TARGET_LEN = 1.35;      // largo deseado del gato en unidades de mundo
+  const catHolder = new THREE.Group();   // lo mueve la máquina de estados
+  stage.add(catHolder);
+
+  const rig = {};        // huesos mapeados por rol
+  let tailChain = [];
+  let catReady = false;
+
+  /* Ejes de flexión (ajustables si algún miembro se moviera raro):
+     los huesos vienen de Blender con +Y a lo largo del hueso, así
+     que X = flexión adelante/atrás y Z = balanceo lateral. */
+  const AX = { legSwing:"x", legFold:"x", tailLift:"x", tailSway:"z", earTwitch:"z", headYaw:"z", headPitch:"x" };
+
+  function normName(n){ return (n||"").toLowerCase().replace(/[._\s]/g,""); }
+  function mapBones(root){
+    const bones=[];
+    root.traverse(o=>{ if(o.isBone) bones.push(o); });
+    const find = (...pats)=> bones.find(b=>{ const n=normName(b.name); return pats.some(p=>n.includes(p)); });
+    rig.root   = find("root01");
+    rig.torso  = find("torso");
+    rig.spine1 = find("spine01");
+    rig.spine2 = find("spine02");
+    rig.neck   = find("neck");
+    rig.head   = find("head0","head");
+    rig.earL   = find("earl");
+    rig.earR   = find("earr");
+    rig.eyeL   = find("eyel");
+    rig.eyeR   = find("eyer");
+    rig.flUp   = find("upperfl");  rig.flLo = find("lowerfl");  rig.flFt = find("footfl");
+    rig.frUp   = find("upperfr");  rig.frLo = find("lowerfr");  rig.frFt = find("footfr");
+    rig.blTh   = find("thighbl");  rig.blUp = find("upperbl");  rig.blLo = find("lowerbl"); rig.blFt = find("footbl");
+    rig.brTh   = find("thighbr");  rig.brUp = find("upperbr");  rig.brLo = find("lowerbr"); rig.brFt = find("footbr");
+    tailChain = ["tail07","tail01","tail02","tail03","tailend"]
+      .map(p=>bones.find(b=>normName(b.name).startsWith(p)))
+      .filter(Boolean);
+    // guardar pose de descanso de TODOS los huesos
+    bones.forEach(b=>{
+      b.userData.restQ = b.quaternion.clone();
+      b.userData.restP = b.position.clone();
+      b.userData.restS = b.scale.clone();
+    });
+    rig.all = bones;
+  }
+  const _e = new THREE.Euler(), _q = new THREE.Quaternion();
+  function addRot(bone, x, y, z){
+    if(!bone) return;
+    _q.setFromEuler(_e.set(x||0, y||0, z||0));
+    bone.quaternion.multiply(_q);
+  }
+  function axisRot(bone, axis, ang){
+    if(!bone || !ang) return;
+    addRot(bone, axis==="x"?ang:0, axis==="y"?ang:0, axis==="z"?ang:0);
+  }
+  function resetBones(){
+    if(!rig.all) return;
+    for(const b of rig.all){
+      b.quaternion.copy(b.userData.restQ);
+      b.position.copy(b.userData.restP);
+      b.scale.copy(b.userData.restS);
+    }
+  }
+
+  /* --- Re-color por shader: gris atigrado + rayas negras +
+         patitas blancas. Usa la POSE DE BIND (atributo position),
+         así el patrón queda pegado al cuerpo aunque se anime. --- */
+  function makeGrayTabby(mat){
+    mat.roughness = 0.9; mat.metalness = 0.0;
+    mat.onBeforeCompile = (shader)=>{
+      shader.vertexShader = shader.vertexShader
+        .replace("#include <common>", "#include <common>\nvarying vec3 vBind;")
+        .replace("#include <begin_vertex>", "#include <begin_vertex>\nvBind = position;");
+      shader.fragmentShader = shader.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec3 vBind;")
+        .replace("#include <map_fragment>", `#include <map_fragment>
+        {
+          // Luminancia del material original (conserva sombreado del toon)
+          float lum = dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114));
+          // Pelaje gris azulado, de oscuro a claro según luminancia
+          vec3 fur = mix(vec3(0.42, 0.44, 0.50), vec3(0.78, 0.80, 0.85), smoothstep(0.12, 0.92, lum));
+
+          // Coordenadas normalizadas de la pose de bind del modelo:
+          // y: 0 (patas) .. 3.70 (orejas) | z: -3.37 (cola) .. 2.40 (cabeza)
+          float ny = clamp(vBind.y / 3.70, 0.0, 1.0);
+          float nz = clamp((vBind.z + 3.37) / 5.77, 0.0, 1.0);
+
+          // Rayas negras sobre el lomo (bandas transversales con ondulación)
+          float band = vBind.z * 2.05 + sin(vBind.x * 3.1) * 0.32 + sin(vBind.y * 2.3) * 0.28;
+          float stripes = smoothstep(0.45, 0.75, sin(band * 3.14159));
+          float backMask = smoothstep(0.42, 0.60, ny)                 // solo parte alta
+                         * smoothstep(0.10, 0.24, nz)                 // no en la cola
+                         * (1.0 - smoothstep(0.80, 0.92, nz));        // no en la cara
+          fur = mix(fur, vec3(0.10, 0.10, 0.12), stripes * backMask * 0.88);
+
+          // Rayas también en la cola (anillos)
+          float tailMask = (1.0 - smoothstep(0.10, 0.20, nz)) * smoothstep(0.02, 0.06, nz);
+          float tailRings = smoothstep(0.35, 0.7, sin(vBind.z * 5.2));
+          fur = mix(fur, vec3(0.10, 0.10, 0.12), tailRings * tailMask * 0.8);
+
+          // Patitas blancas (parte baja de las piernas)
+          float paw = 1.0 - smoothstep(0.42, 0.80, vBind.y);
+          // Punta de cola blanca
+          float tailTip = 1.0 - smoothstep(-3.34, -2.80, vBind.z);
+          // Pecho y hocico claros
+          float chest = smoothstep(0.58, 0.95, nz) * (1.0 - smoothstep(0.30, 0.58, ny));
+          fur = mix(fur, vec3(0.94, 0.95, 0.97), clamp(max(paw, tailTip), 0.0, 1.0) * 0.92);
+          fur = mix(fur, vec3(0.88, 0.89, 0.92), chest * 0.45);
+
+          diffuseColor.rgb = fur;
+        }`);
+    };
+    mat.needsUpdate = true;
+  }
+
+  /* Mide la pose YA renderizada (vértices con skinning aplicado):
+     los GLB de Sketchfab suelen traer nodos con escala x100, así que
+     no se puede confiar ni en la geometría ni en un bbox simple. */
+  function measureSkinned(root){
+    let sk=null; root.traverse(o=>{ if(o.isSkinnedMesh && !sk) sk=o; });
+    if(!sk) return null;
+    root.updateMatrixWorld(true);
+    const pos=sk.geometry.attributes.position, v=new THREE.Vector3();
+    const box=new THREE.Box3(); box.makeEmpty();
+    const step=Math.max(1, Math.floor(pos.count/1200));
+    for(let i=0;i<pos.count;i+=step){
+      v.fromBufferAttribute(pos,i);
+      if(sk.boneTransform) sk.boneTransform(i,v);
+      v.applyMatrix4(sk.matrixWorld);
+      box.expandByPoint(v);
+    }
+    return box;
+  }
+
+  function onModelReady(gltf){
+    const model = gltf.scene;
+    model.traverse(o=>{
+      if(o.isMesh || o.isSkinnedMesh){
+        o.castShadow = true; o.receiveShadow = false;
+        o.frustumCulled = false;   // el esqueleto mueve la malla fuera de su bbox original
+        const mats = Array.isArray(o.material) ? o.material : [o.material];
+        mats.forEach(makeGrayTabby);
+      }
+    });
+    /* Auto-normalizar: centrar, apoyar patas en y=0 y escalar al largo objetivo */
+    const box = measureSkinned(model);
+    const align = new THREE.Group();
+    let s = 1;
+    if(box){
+      const size=new THREE.Vector3(); box.getSize(size);
+      const len = Math.max(size.x, size.z) || 1;   // el eje horizontal más largo = cuerpo
+      s = CAT_TARGET_LEN / len;
+      align.position.set(-(box.min.x+box.max.x)/2, -box.min.y, -(box.min.z+box.max.z)/2);
+    }
+    align.add(model);
+    const inner = new THREE.Group();
+    inner.rotation.y = Math.PI / 2;   // el modelo mira a +Z -> lo giramos a +X
+    inner.scale.setScalar(s);
+    inner.add(align);
+    catHolder.add(inner);
+    mapBones(model);
+    catReady = true;
+    blob.material.opacity = 0.5;
+  }
+
+  function loadModel(i){
+    if(i >= MODEL_URLS.length){
+      console.warn("[cat] No se pudo cargar el modelo del gato. Descarga cat.glb y ponlo junto a este HTML.");
+      return;
+    }
+    new THREE.GLTFLoader().load(
+      MODEL_URLS[i],
+      onModelReady,
+      undefined,
+      ()=> loadModel(i+1)
+    );
+  }
+  if(window.THREE && THREE.GLTFLoader) loadModel(0);
+  else console.warn("[cat] GLTFLoader no disponible.");
+
+  /* --- Referencias geométricas (pivote del gato = sus patas) --- */
+  const LAPTOP_TOP = 0.17;
+  const LYING_Y      = LAPTOP_TOP - 0.115;  // se hunde: patas recogidas quedan dentro de la base
+  const LAP_STAND_Y  = LAPTOP_TOP;
+  const DESK_STAND_Y = 0.0;
+  const YAW_IDLE=-1.45, YAW_LEFT=-Math.PI, YAW_RIGHT=0;
+
+  /* --- Máquina de estados (igual que v4) --- */
+  const randomRestDuration = () => 20 + Math.random() * 10;
+  const SETTLE_TO_LIE_DUR = 1.4;
+  const STATES = { LYING:{dur:randomRestDuration()}, STAND:{dur:0.9}, WALK_OFF:{dur:3.4}, WALK_BACK:{dur:3.7}, CLIMB:{dur:1.25} };
+  const ORDER = ["LYING","STAND","WALK_OFF","WALK_BACK","CLIMB"];
+  let stateIdx=0, stateName="LYING", t=0;
+  let idleInteractions = 0;
+  let exitSide = 1;
+  let from={x:0,y:LYING_Y,z:0.05,yaw:YAW_IDLE,pose:0};
+  let to=Object.assign({},from);
+  const state={x:0,y:LYING_Y,z:0.05,yaw:YAW_IDLE,pose:0};
+  const ease=(u)=> u<0.5 ? 2*u*u : 1-Math.pow(-2*u+2,2)/2;
+
+  function enter(name){
+    const previousName = stateName;
+    stateName=name; t=0; from=Object.assign({},state);
+    if(name==="LYING"){
+      if(previousName==="CLIMB") exitSide *= -1;
+      STATES.LYING.dur = randomRestDuration();
+      idleInteractions = 0;
+    }
+    if(name==="WALK_BACK" && previousName==="WALK_OFF"){
+      Object.assign(state, {
+        x:-exitSide*10.2, y:DESK_STAND_Y, z:0.85,
+        yaw:exitSide > 0 ? YAW_RIGHT : YAW_LEFT, pose:1
+      });
+      from=Object.assign({},state);
+    }
+    switch(name){
+      case "LYING":     to={x:0,    y:LYING_Y,     z:0.05,yaw:YAW_IDLE, pose:0}; break;
+      case "STAND":     to={x:0,    y:LAP_STAND_Y, z:0.05,yaw:YAW_IDLE, pose:1}; break;
+      case "WALK_OFF":  to={x:exitSide*10.4,  y:DESK_STAND_Y,z:0.85,yaw:exitSide > 0 ? YAW_RIGHT : YAW_LEFT,pose:1}; break;
+      case "WALK_BACK": to={x:exitSide*1.45,  y:DESK_STAND_Y,z:0.85,yaw:exitSide > 0 ? YAW_RIGHT : YAW_LEFT,pose:1}; break;
+      case "CLIMB":     to={x:0,    y:LAP_STAND_Y, z:0.1, yaw:YAW_IDLE, pose:1}; break;
+    }
+  }
+  function advance(){ stateIdx=(stateIdx+1)%ORDER.length; enter(ORDER[stateIdx]); }
+  enter("LYING");
+
+  let walkPhase=0;
+  let nextFlick=1.3, flickActive=false, flickT=0; const flickDur=0.85; let flickDir=1;
+  let nextEar=3.0, earActive=false, earT=0; const earDur=0.32; let earWhich=0;
+  let nextBlink=2.2, blinkActive=false, blinkT=0; const blinkDur=0.15;
+  const clock = new THREE.Clock();
+  let screenPower = 0;
+
+  function updateScreenPower(dt, force=false){
+    const target = (stateName==="LYING" && state.pose < 0.3 && Math.abs(state.x) < 0.8) ? 0 : 1;
+    const speed = target > screenPower ? 4.2 : 3.0;
+    const k = force ? 1 : Math.min(1, dt * speed);
+    screenPower += (target - screenPower) * k;
+    const flicker = screenPower > 0.05 ? Math.sin(clock.elapsedTime * 7.5) * 0.035 : 0;
+    screenOnMat.opacity = screenPower;
+    screenOnMat.emissiveIntensity = Math.max(0, screenPower * 1.16 + flicker);
+    screenLight.intensity = screenPower * 1.55;
+    screenGlow.material.opacity = screenPower * 0.16;
+    powerLedMat.color.setHex(screenPower > 0.25 ? 0x56d0c0 : 0x162020);
+  }
+
+  /* --- Pose procedural sobre el esqueleto real --- */
+  function poseSkeleton(now, dt, lie, walking, resting){
+    if(!catReady) return;
+    resetBones();
+
+    /* Respiración: leve escala del torso (más honda al dormir) */
+    if(rig.torso){
+      const depth = 0.02 + lie*0.018;
+      const b = 1 + Math.sin(now*(walking?5.4:1.8))*depth;
+      rig.torso.scale.multiplyScalar(b);
+    }
+
+    /* Cabeza y cuello: alerta con vaivén perezoso; bob al caminar */
+    const lookY = Math.sin(now*0.5)*0.14*lie + (walking ? Math.sin(walkPhase*0.5)*0.06 : 0);
+    const lookP = Math.sin(now*0.85)*0.05*lie + (walking ? Math.sin(walkPhase+0.6)*0.05 : 0);
+    axisRot(rig.neck, AX.headPitch, lookP*0.5 + lie*0.10);
+    axisRot(rig.head, AX.headPitch, lookP*0.5);
+    axisRot(rig.head, AX.headYaw, lookY);
+
+    /* Orejas: twitch ocasional */
+    if(resting && !earActive && now>nextEar){ earActive=true; earT=0; earWhich=Math.random()<0.5?0:1; }
+    if(earActive){
+      earT+=dt;
+      if(earT>=earDur){
+        earActive=false;
+        if(stateName==="LYING") idleInteractions += 1;
+        nextEar=now+4+Math.random()*5;
+      }
+    }
+    if(earActive){
+      const p=earT/earDur, tw=Math.sin(p*Math.PI)*0.5;
+      axisRot(earWhich===0?rig.earL:rig.earR, AX.earTwitch, earWhich===0?tw:-tw);
+    }
+
+    /* Parpadeo: escala vertical de los huesos de ojo */
+    if(!blinkActive && now>nextBlink){ blinkActive=true; blinkT=0; }
+    if(blinkActive){
+      blinkT+=dt; const p=blinkT/blinkDur;
+      const s=Math.max(0.08, 1-Math.sin(p*Math.PI));
+      if(rig.eyeL) rig.eyeL.scale.y *= s;
+      if(rig.eyeR) rig.eyeR.scale.y *= s;
+      if(blinkT>=blinkDur){ blinkActive=false; nextBlink=now+2.5+Math.random()*3.5; }
+    }
+
+    /* Patas */
+    if(walking){
+      const A=0.5, K=0.35;
+      const swing = (ph)=>Math.sin(ph);
+      const ph1=walkPhase, ph2=walkPhase+Math.PI;
+      // pares diagonales: FL+BR con ph1, FR+BL con ph2
+      axisRot(rig.flUp, AX.legSwing,  swing(ph1)*A);
+      axisRot(rig.flLo, AX.legSwing,  Math.max(0, Math.cos(ph1))*K);
+      axisRot(rig.brTh, AX.legSwing,  swing(ph1)*A*0.9);
+      axisRot(rig.brLo, AX.legSwing, -Math.max(0, Math.cos(ph1))*K);
+      axisRot(rig.frUp, AX.legSwing,  swing(ph2)*A);
+      axisRot(rig.frLo, AX.legSwing,  Math.max(0, Math.cos(ph2))*K);
+      axisRot(rig.blTh, AX.legSwing,  swing(ph2)*A*0.9);
+      axisRot(rig.blLo, AX.legSwing, -Math.max(0, Math.cos(ph2))*K);
+    } else if(lie > 0.02){
+      /* Echado: patas delanteras estiradas al frente (esfinge),
+         traseras recogidas bajo el cuerpo */
+      axisRot(rig.flUp, AX.legFold, -0.85*lie);
+      axisRot(rig.flLo, AX.legFold,  0.55*lie);
+      axisRot(rig.flFt, AX.legFold,  0.35*lie);
+      axisRot(rig.frUp, AX.legFold, -0.85*lie);
+      axisRot(rig.frLo, AX.legFold,  0.55*lie);
+      axisRot(rig.frFt, AX.legFold,  0.35*lie);
+      axisRot(rig.blTh, AX.legFold,  1.05*lie);
+      axisRot(rig.blLo, AX.legFold, -1.35*lie);
+      axisRot(rig.blFt, AX.legFold,  0.55*lie);
+      axisRot(rig.brTh, AX.legFold,  1.05*lie);
+      axisRot(rig.brLo, AX.legFold, -1.35*lie);
+      axisRot(rig.brFt, AX.legFold,  0.55*lie);
+      /* La columna se relaja un poco */
+      axisRot(rig.spine1, AX.headPitch, 0.10*lie);
+      axisRot(rig.spine2, AX.headPitch, -0.06*lie);
+    }
+
+    /* COLA — el alma del gato */
+    if(walking){
+      // levantada y meciéndose con el paso
+      const tw=Math.sin(walkPhase*0.7)*0.20;
+      tailChain.forEach((seg,i)=>{
+        axisRot(seg, AX.tailLift, -0.16 - i*0.02);
+        axisRot(seg, AX.tailSway, tw*(0.4+i*0.22));
+      });
+    } else {
+      if(resting && !flickActive && now>nextFlick){ flickActive=true; flickT=0; flickDir=Math.random()<0.5?1:-1; }
+      let p=0, flickAmp=0;
+      if(flickActive){
+        flickT+=dt; p=flickT/flickDur; flickAmp=Math.sin(p*Math.PI);
+        if(flickT>=flickDur){
+          flickActive=false;
+          if(stateName==="LYING") idleInteractions += 1;
+          nextFlick=now+4+Math.random()*5;
+        }
+      }
+      tailChain.forEach((seg,i)=>{
+        // enroscada al costado al echarse + vaivén suave siempre
+        const curl = lie*(0.28 + i*0.10);
+        const sway = Math.sin(now*1.15 + i*0.55)*0.05*(1+i*0.35);
+        const whip = flickActive ? flickDir*flickAmp*Math.sin(p*Math.PI*3 - i*0.75)*(0.14 + i*0.07) : 0;
+        axisRot(seg, AX.tailSway, curl + sway + whip);
+        axisRot(seg, AX.tailLift, -0.05*lie*i);
+      });
+    }
+  }
+
+  function updateCat(dt){
+    const now = clock.elapsedTime; t += dt;
+    const cfg = STATES[stateName];
+    const u = Math.min(t/cfg.dur, 1);
+    const motionU = stateName==="LYING" ? Math.min(t/SETTLE_TO_LIE_DUR, 1) : u;
+    const e = ease(motionU);
+    state.x=from.x+(to.x-from.x)*e; state.y=from.y+(to.y-from.y)*e; state.z=from.z+(to.z-from.z)*e;
+    state.yaw=from.yaw+(to.yaw-from.yaw)*e; state.pose=from.pose+(to.pose-from.pose)*e;
+
+    const lie=1-state.pose;
+    const walking=(stateName==="WALK_OFF"||stateName==="WALK_BACK");
+    const resting=(stateName==="LYING"||stateName==="STAND");
+
+    let bob=0, climbArc=0, walkLean=0;
+    if(walking){
+      walkPhase+=dt*7.4;
+      bob=Math.abs(Math.sin(walkPhase))*0.03;
+      walkLean=Math.sin(walkPhase*0.5)*0.03;
+    }
+    if(stateName==="CLIMB") climbArc = Math.sin(e*Math.PI) * 0.34;
+    catHolder.position.set(state.x, state.y+bob+climbArc, state.z);
+    catHolder.rotation.y=state.yaw;
+    catHolder.rotation.z=stateName==="CLIMB" ? -Math.sin(e*Math.PI)*0.12 : walkLean;
+
+    const onLaptop=(Math.abs(state.x)<1.1 && state.z<0.45);
+    blob.position.set(state.x,(onLaptop?LAPTOP_TOP:0.0)+0.012,state.z);
+    const near=Math.min(1,Math.max(0.22,1-Math.abs(state.x)/10));
+    if(catReady){ blob.material.opacity=0.55*near; }
+    blob.scale.setScalar(0.9+near*0.3);
+    updateScreenPower(dt);
+
+    poseSkeleton(now, dt, lie, walking, resting);
+
+    if(u>=1){
+      if(stateName==="LYING" && idleInteractions < 2){
+        t = cfg.dur - 0.35;
+      } else {
+        advance();
+      }
+    }
+  }
+
+  window.__catSceneDebug = {
+    getState: () => ({
+      stateName,
+      catReady,
+      catX: Number(state.x.toFixed(2)),
+      catY: Number(state.y.toFixed(2)),
+      catZ: Number(state.z.toFixed(2)),
+      idleInteractions,
+      exitSide,
+      screenPower: Number(screenPower.toFixed(2))
+    })
+  };
+
+  function loop(){
+    const dt=Math.min(clock.getDelta(),0.05);
+    updateCat(dt);
+    if(!reduce){
+      const now=clock.elapsedTime;
+      camera.position.x=1.0+Math.sin(now*0.24)*0.28;
+      camera.position.y=1.35+Math.sin(now*0.33)*0.1;
+      camera.lookAt(0,0.55,0);
+    } else {
+      camera.position.set(1.0,1.35,6.1);
+      camera.lookAt(0,0.55,0);
+    }
+    renderer.render(scene,camera);
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+</script>
+</body>
+</html>
