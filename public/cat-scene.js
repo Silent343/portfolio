@@ -29,7 +29,7 @@ window.initCatScene = function(){
   }
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, preserveDrawingBuffer:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
@@ -50,7 +50,7 @@ window.initCatScene = function(){
   const key = new THREE.DirectionalLight(0xffc27a, 1.7);
   key.position.set(5, 5.5, 6);
   key.castShadow = true;
-  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.mapSize.set(1024, 1024);
   key.shadow.radius = 7;
   key.shadow.camera.left=-8; key.shadow.camera.right=8;
   key.shadow.camera.top=8; key.shadow.camera.bottom=-8;

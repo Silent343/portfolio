@@ -1,16 +1,22 @@
+import { Suspense, lazy } from "react";
 import { Github, Mail, Linkedin } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { CONFIG, SPLINE_SCENE } from "../data/content";
-import { GLSLHills } from "./ui/glsl-hills";
 import { SplineScene } from "./ui/splite";
 import { Spotlight } from "./ui/spotlight";
 import { Card } from "./ui/card";
 import { containerStyle } from "./SectionHead";
+import { useInView } from "../lib/useInView";
+
+// Lazy so `three` (only used by the hills) is split into its own chunk and
+// never touches the initial page load.
+const GLSLHills = lazy(() => import("./ui/glsl-hills"));
 
 const strip = (u: string) => u.replace(/^https?:\/\//, "");
 
 export default function Contact() {
   const { t } = useApp();
+  const { ref, inView } = useInView<HTMLElement>("300px");
 
   const links = [
     { icon: <Github size={20} />, label: "GitHub", value: strip(CONFIG.github), href: CONFIG.github, ext: true },
@@ -19,10 +25,14 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" style={{ position: "relative", zIndex: 1, padding: "clamp(72px,10vw,120px) 0", overflow: "hidden", minHeight: "92vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-      {/* GLSL animated hills background */}
+    <section ref={ref} id="contact" style={{ position: "relative", zIndex: 1, padding: "clamp(72px,10vw,120px) 0", overflow: "hidden", minHeight: "92vh", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      {/* GLSL animated hills background — mounted only when the section is near view */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <GLSLHills speed={0.5} />
+        {inView && (
+          <Suspense fallback={null}>
+            <GLSLHills speed={0.5} />
+          </Suspense>
+        )}
       </div>
       <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", background: "linear-gradient(90deg, rgba(12,15,23,.85) 0%, rgba(12,15,23,.4) 45%, rgba(12,15,23,.05) 100%), linear-gradient(180deg, #0c0f17 0%, transparent 20%, transparent 100%)" }} />
 
@@ -69,7 +79,7 @@ export default function Contact() {
                   <a href={`mailto:${CONFIG.email}`} style={{ marginTop: 22, alignSelf: "flex-start", fontFamily: "'Space Grotesk',sans-serif", fontWeight: 600, fontSize: 14, padding: "12px 22px", borderRadius: 999, background: "var(--accent)", color: "var(--on-accent)", boxShadow: "0 8px 30px var(--glow-a)" }}>{t.contact.robotKicker} →</a>
                 </div>
                 <div style={{ flex: "1 1 220px", position: "relative", minHeight: 240 }}>
-                  <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />
+                  {inView && <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />}
                 </div>
               </div>
             </Card>

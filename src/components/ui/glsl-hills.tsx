@@ -176,7 +176,7 @@ const GLSLHills = ({
       raf = requestAnimationFrame(renderLoop);
     };
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setClearColor(0x000000, 0);
     // Raise the camera and lower the look target so the horizon sits higher:
     // the wave field then fills the frame downward instead of leaving dark sky.
@@ -202,3 +202,4 @@ const GLSLHills = ({
 };
 
 export { GLSLHills };
+export default GLSLHills;
