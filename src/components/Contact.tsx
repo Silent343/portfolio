@@ -68,19 +68,24 @@ export default function Contact() {
           </div>
 
           {/* Right: Spline robot card (replaces the old form) */}
-          <div data-reveal style={{ flex: "1 1 420px", minWidth: 0 }}>
-            <Card className="w-full relative overflow-hidden border-0" style={{ height: 460, background: "rgba(7,9,14,.72)", backdropFilter: "blur(6px)", border: "1px solid rgba(255,255,255,.1)" }}>
+          <div data-reveal style={{ flex: "1 1 440px", minWidth: 0 }}>
+            <Card className="w-full relative overflow-hidden border-0" style={{ height: 500, background: "rgba(7,9,14,.72)", backdropFilter: "blur(6px)", border: "1px solid rgba(255,255,255,.1)" }}>
               <Spotlight className="-top-40 left-0 md:left-60 md:-top-20 from-white via-white/60 to-transparent" />
-              <div style={{ display: "flex", height: "100%", flexWrap: "wrap" }}>
-                <div style={{ flex: "1 1 220px", padding: 32, position: "relative", zIndex: 10, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                  <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, letterSpacing: 1, color: "var(--accent2)", marginBottom: 12 }}>{t.contact.robotKicker}</span>
-                  <h3 style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: "clamp(1.6rem,3vw,2.1rem)", lineHeight: 1.1, background: "linear-gradient(to bottom, #fafafa, #a3a3a3)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{t.contact.robotTitle}</h3>
-                  <p style={{ marginTop: 16, color: "#c1c9de", maxWidth: 320, fontSize: ".98rem" }}>{t.contact.robotDesc}</p>
-                  <a href={`mailto:${CONFIG.email}`} style={{ marginTop: 22, alignSelf: "flex-start", fontFamily: "'Space Grotesk',sans-serif", fontWeight: 600, fontSize: 14, padding: "12px 22px", borderRadius: 999, background: "var(--accent)", color: "var(--on-accent)", boxShadow: "0 8px 30px var(--glow-a)" }}>{t.contact.robotKicker} →</a>
-                </div>
-                <div style={{ flex: "1 1 220px", position: "relative", minHeight: 240 }}>
-                  {inView && <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />}
-                </div>
+
+              {/* Robot pinned to the right, absolute so it can never resize the card */}
+              <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "60%", zIndex: 1 }}>
+                {inView && <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />}
+              </div>
+
+              {/* Gradient keeps the copy readable over the robot */}
+              <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none", background: "linear-gradient(90deg, rgba(7,9,14,.94) 0%, rgba(7,9,14,.7) 40%, rgba(7,9,14,.15) 66%, transparent 82%)" }} />
+
+              {/* Copy, vertically centered on the left */}
+              <div style={{ position: "relative", zIndex: 10, height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", padding: 34, maxWidth: "68%" }}>
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 12, letterSpacing: 1, color: "var(--accent2)", marginBottom: 12 }}>{t.contact.robotKicker}</span>
+                <h3 style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700, fontSize: "clamp(1.6rem,3vw,2.1rem)", lineHeight: 1.1, background: "linear-gradient(to bottom, #fafafa, #a3a3a3)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{t.contact.robotTitle}</h3>
+                <p style={{ marginTop: 16, color: "#c1c9de", maxWidth: 300, fontSize: ".98rem" }}>{t.contact.robotDesc}</p>
+                <a href={`mailto:${CONFIG.email}`} style={{ marginTop: 22, alignSelf: "flex-start", fontFamily: "'Space Grotesk',sans-serif", fontWeight: 600, fontSize: 14, padding: "12px 22px", borderRadius: 999, background: "var(--accent)", color: "var(--on-accent)", boxShadow: "0 8px 30px var(--glow-a)" }}>{t.contact.robotKicker} →</a>
               </div>
             </Card>
           </div>
