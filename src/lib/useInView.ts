@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Returns a ref + boolean that flips true the first time the element enters
  * the viewport (with a margin so heavy content can warm up just before).
- * Used to defer expensive WebGL (GLSL hills, Spline robot) off the initial load.
+ * Used to keep expensive WebGL scenes off the initial page load.
  */
 export function useInView<T extends HTMLElement>(rootMargin = "250px") {
   const ref = useRef<T>(null);

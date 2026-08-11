@@ -1,24 +1,26 @@
 import { ArrowUpRight } from "lucide-react";
 import { useApp } from "../context/AppContext";
-import { PROJECTS, CONFIG } from "../data/content";
-import SectionHead, { sectionStyle, containerStyle } from "./SectionHead";
+import { CONFIG, PROJECTS } from "../data/content";
+import SectionHead, { containerStyle, sectionStyle } from "./SectionHead";
 
 export default function Projects() {
   const { t } = useApp();
+
   return (
     <section id="projects" style={sectionStyle}>
       <div style={containerStyle}>
         <SectionHead num="02" tag={t.projects.tag} title={t.projects.title} sub={t.projects.sub} />
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(330px,1fr))", gap: 22 }}>
+        <div className="projects-grid">
           {PROJECTS.map((proj, i) => (
             <a
               key={proj.name}
               href={CONFIG.github}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               data-reveal
               className="proj-card"
+              aria-label={`${t.projects.viewLabel}: ${proj.name}`}
               style={{
                 display: "flex", flexDirection: "column", color: "inherit",
                 border: "1px solid rgba(255,255,255,.1)", borderRadius: 20, overflow: "hidden",
@@ -40,14 +42,10 @@ export default function Projects() {
                 style={{
                   position: "relative", width: "100%", aspectRatio: "16 / 10", borderRadius: 12,
                   overflow: "hidden", border: "1px solid rgba(255,255,255,.07)",
-                  background:
-                    "repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 2px, transparent 2px 11px), #0e1420",
-                  display: "grid", placeItems: "center", marginBottom: 18,
+                  background: "#0e1420", marginBottom: 18,
                 }}
               >
-                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: ".82rem", color: "#5b6480", letterSpacing: 1 }}>
-                  {proj.name.toLowerCase()} · preview
-                </span>
+                <img src={proj.image} alt={`Preview de ${proj.name}`} loading="lazy" />
               </div>
 
               <h3 style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 600, fontSize: "1.3rem", color: "#eef2fb", marginBottom: 10 }}>
@@ -56,9 +54,9 @@ export default function Projects() {
               <p style={{ color: "#8a93ab", fontSize: ".97rem", marginBottom: 16, flex: 1 }}>{t.projects.descs[i]}</p>
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {proj.tags.map((tg) => (
-                  <span key={tg} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: ".72rem", padding: "5px 11px", borderRadius: 999, border: "1px solid rgba(255,255,255,.14)", color: "var(--accent2)", background: "var(--tint2)" }}>
-                    {tg}
+                {proj.tags.map((tag) => (
+                  <span key={tag} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: ".72rem", padding: "5px 11px", borderRadius: 999, border: "1px solid rgba(255,255,255,.14)", color: "var(--accent2)", background: "var(--tint2)" }}>
+                    {tag}
                   </span>
                 ))}
               </div>

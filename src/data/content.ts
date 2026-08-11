@@ -12,14 +12,14 @@ export const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icon
 export const SPLINE_SCENE = "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode";
 
 export const PROJECTS = [
-  { name: "Amora", tags: ["Spring Boot", "Three.js", "DDD"] },
-  { name: "Guardian", tags: ["Spring Boot", "WebSocket", "Angular"] },
-  { name: "FinancePE", tags: ["Java", "Finanzas", "Newton-Raphson"] },
-  { name: "DocFlow", tags: ["FastAPI", "IA", "SUNAT"] },
-  { name: "AuditFlow", tags: ["Spring Boot", "Claude API", "Angular"] },
-  { name: "MineGuard", tags: ["ESP32", "FreeRTOS", "IoT"] },
-  { name: "PixelRoom", tags: ["WebSocket", "STOMP", "Angular"] },
-  { name: "SmartDrive", tags: ["Spring Boot", "Angular", "IA"] },
+  { name: "Lievda", image: "/projects/lievda.jpeg", tags: ["Web", "Mobile", "UX"] },
+  { name: "Pixel Room", image: "/projects/pixelroom.png", tags: ["Web", "Pixel Art", "Interactivo"] },
+  { name: "C4 Diagrams", image: "/projects/c4 diagrams.png", tags: ["Arquitectura", "C4", "Diagramas"] },
+  { name: "Dockflow", image: "/projects/dockflow.png", tags: ["IA", "SUNAT", "Documentos"] },
+  { name: "Smart Drive Finance", image: "/projects/smartDrive.png", tags: ["Finanzas", "TCEA / TIR", "Newton-Raphson"] },
+  { name: "Commit Ecosystem", image: "/projects/ecommit.png", tags: ["Git", "Visualización", "Commits"] },
+  { name: "Wedwell", image: "/projects/wedwell.png", tags: ["Web", "Bodas", "Planificación"] },
+  { name: "RAG", image: "/projects/rag.png", tags: ["IA", "RAG", "Documentos"] },
 ];
 
 export const TOOLGROUPS: { cat: "c1" | "c2" | "c3" | "c4"; items: [string, string, boolean?][] }[] = [
