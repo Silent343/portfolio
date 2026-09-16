@@ -25,8 +25,8 @@ export const PROJECTS = [
 export const TOOLGROUPS: { cat: "c1" | "c2" | "c3" | "c4"; items: [string, string, boolean?][] }[] = [
   { cat: "c1", items: [["HTML5","html5/html5-original.svg"],["CSS3","css3/css3-original.svg"],["JavaScript","javascript/javascript-original.svg"],["TypeScript","typescript/typescript-original.svg"],["Python","python/python-original.svg"],["C++","cplusplus/cplusplus-original.svg"]] },
   { cat: "c2", items: [["Node.js","nodejs/nodejs-original.svg"],["Angular","angular/angular-original.svg"],["Vue","vuejs/vuejs-original.svg"],["React","react/react-original.svg"],["Flutter","flutter/flutter-original.svg"],[".NET","dot-net/dot-net-original.svg"],["Spring","spring/spring-original.svg"]] },
-  { cat: "c3", items: [["MongoDB","mongodb/mongodb-original.svg"],["PostgreSQL","postgresql/postgresql-original.svg"],["SQLite","sqlite/sqlite-original.svg"]] },
-  { cat: "c4", items: [["Git","git/git-original.svg"],["GitHub","github/github-original.svg",true],["Figma","figma/figma-original.svg"],["Firebase","firebase/firebase-plain.svg"],["Windows","windows8/windows8-original.svg"],["VS Code","vscode/vscode-original.svg"],["Visual Studio","visualstudio/visualstudio-plain.svg"]] },
+  { cat: "c3", items: [["MongoDB","mongodb/mongodb-original.svg"],["PostgreSQL","postgresql/postgresql-original.svg"],["MySQL","mysql/mysql-original.svg"],["SQLite","sqlite/sqlite-original.svg"]] },
+  { cat: "c4", items: [["Git","git/git-original.svg"],["GitHub","github/github-original.svg",true],["Figma","figma/figma-original.svg"],["Firebase","firebase/firebase-plain.svg"],["Vercel","vercel/vercel-original.svg",true],["Supabase","supabase/supabase-original.svg"],["Render","render/render-original.svg"],["Windows","windows8/windows8-original.svg"],["VS Code","vscode/vscode-original.svg"],["Visual Studio","visualstudio/visualstudio-plain.svg"]] },
 ];
 
 export const PALETTES: Record<string, Record<string, string>> = {
