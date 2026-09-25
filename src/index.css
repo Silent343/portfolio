@@ -198,6 +198,7 @@ input::placeholder, textarea::placeholder { color: #5b6480; }
   width: 68%;
   min-width: 460px;
   pointer-events: none;
+  background: radial-gradient(circle at 65% 55%, var(--bg-glow2), transparent 58%);
 }
 .contact-showcase-shade {
   position: absolute;
@@ -237,6 +238,62 @@ input::placeholder, textarea::placeholder { color: #5b6480; }
   color: #aeb7cc;
   font-size: .96rem;
 }
+.contact-3d-trigger {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 32%;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: rgba(18, 24, 38, .7);
+  color: #eef2fb;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.contact-3d-trigger:hover,
+.contact-3d-trigger:focus-visible {
+  border-color: var(--accent-border);
+  background: rgba(26, 34, 51, .94);
+}
+.contact-3d-icon {
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--tint2), rgba(18,24,38,.35) 70%);
+  color: var(--accent2);
+  box-shadow: inset 0 0 0 1px var(--accent2-border), 0 0 32px var(--bg-glow2);
+}
+.contact-3d-pause {
+  position: absolute;
+  z-index: 5;
+  right: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border: 1px solid rgba(255,255,255,.17);
+  border-radius: 999px;
+  background: rgba(7,9,14,.82);
+  color: #eef2fb;
+  font-size: .8rem;
+  cursor: pointer;
+}
+.contact-3d-pause:hover,
+.contact-3d-pause:focus-visible { border-color: var(--accent-border); }
 .contact-cta {
   align-self: flex-start;
   display: inline-flex;
@@ -293,5 +350,8 @@ input::placeholder, textarea::placeholder { color: #5b6480; }
   .contact-showcase-shade { background: linear-gradient(180deg, rgba(7,9,14,.98) 0%, rgba(7,9,14,.94) 34%, rgba(7,9,14,.52) 56%, rgba(7,9,14,.04) 82%); }
   .contact-showcase-copy { height: auto; max-width: none; padding: 28px; justify-content: flex-start; }
   .contact-showcase-copy p { max-width: 100%; }
+  .contact-3d-trigger { top: auto; bottom: 65px; left: 50%; right: auto; transform: translateX(-50%); width: 62%; padding: 12px; gap: 7px; }
+  .contact-3d-icon { width: 64px; height: 64px; }
+  .contact-3d-icon svg { width: 34px; height: 34px; }
 }
 @media (max-width: 780px) { .cat-cap { display: none; } }

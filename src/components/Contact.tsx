@@ -1,17 +1,38 @@
-import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Box, Github, Linkedin, Mail, Pause } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { CONFIG, SPLINE_SCENE } from "../data/content";
-import { useInView } from "../lib/useInView";
 import { containerStyle } from "./SectionHead";
 import { Card } from "./ui/card";
 import { SplineScene } from "./ui/splite";
-import { Spotlight } from "./ui/spotlight";
 
 const strip = (url: string) => url.replace(/^https?:\/\//, "");
 
 export default function Contact() {
   const { t } = useApp();
-  const { ref, inView } = useInView<HTMLElement>("240px");
+  const ref = useRef<HTMLElement>(null);
+  const [show3D, setShow3D] = useState(false);
+
+  useEffect(() => {
+    const section = ref.current;
+    if (!section) return;
+
+    const observer = "IntersectionObserver" in window
+      ? new IntersectionObserver(([entry]) => {
+          if (!entry.isIntersecting) setShow3D(false);
+        })
+      : null;
+    const onVisibilityChange = () => {
+      if (document.hidden) setShow3D(false);
+    };
+
+    observer?.observe(section);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, []);
 
   const links = [
     { icon: <Github size={20} />, label: "GitHub", value: strip(CONFIG.github), href: CONFIG.github, ext: true },
@@ -57,12 +78,21 @@ export default function Contact() {
 
           <div data-reveal className="contact-showcase-wrap">
             <Card className="contact-showcase">
-              <Spotlight className="-top-40 left-0 md:left-60 md:-top-20 from-white via-white/60 to-transparent" />
-
               <div className="contact-spline" aria-hidden="true">
-                {inView && <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />}
+                {show3D && <SplineScene scene={SPLINE_SCENE} className="w-full h-full" />}
               </div>
               <div className="contact-showcase-shade" aria-hidden="true" />
+
+              {show3D ? (
+                <button type="button" className="contact-3d-pause" onClick={() => setShow3D(false)}>
+                  <Pause size={16} aria-hidden="true" />{t.contact.pause3D}
+                </button>
+              ) : (
+                <button type="button" className="contact-3d-trigger" onClick={() => setShow3D(true)}>
+                  <span className="contact-3d-icon"><Box size={44} strokeWidth={1.4} aria-hidden="true" /></span>
+                  <span>{t.contact.show3D}</span>
+                </button>
+              )}
 
               <div className="contact-showcase-copy">
                 <span className="contact-kicker">{t.contact.robotKicker}</span>

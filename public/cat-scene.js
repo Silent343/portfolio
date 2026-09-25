@@ -5,8 +5,6 @@ window.initCatScene = function(){
   const canvas = document.getElementById("cat-canvas");
   if(!canvas || !window.THREE) return false;
   window.__catStarted = true;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   const MODEL_URLS = [
     (window.__resources && window.__resources.catGlb) ? window.__resources.catGlb : "cat.glb",
     "https://raw.githubusercontent.com/DevTakao/threejs-cat/HEAD/assets/models/toon_cat_free.glb"
@@ -28,8 +26,8 @@ window.initCatScene = function(){
     return 2.15;
   }
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, preserveDrawingBuffer:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputEncoding = THREE.sRGBEncoding;
@@ -50,7 +48,7 @@ window.initCatScene = function(){
   const key = new THREE.DirectionalLight(0xffc27a, 1.7);
   key.position.set(5, 5.5, 6);
   key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.mapSize.set(512, 512);
   key.shadow.radius = 7;
   key.shadow.camera.left=-8; key.shadow.camera.right=8;
   key.shadow.camera.top=8; key.shadow.camera.bottom=-8;
@@ -71,39 +69,15 @@ window.initCatScene = function(){
   function woodTexture(){
     const c=document.createElement("canvas"); c.width=512; c.height=256;
     const g=c.getContext("2d");
-    g.fillStyle="#54290f"; g.fillRect(0,0,512,256);
-    for(let y=0;y<256;y+=3){
-      g.globalAlpha=.04+Math.random()*.06;
-      g.strokeStyle=Math.random()>.5?"#6d3a18":"#3e1d0b";
-      g.lineWidth=1+Math.random()*1.6;
-      g.beginPath(); g.moveTo(0,y);
-      for(let x=0;x<=512;x+=32) g.lineTo(x, y+Math.sin(x*.02+y*.7)*1.8);
-      g.stroke();
-    }
-    for(let i=0;i<4;i++){
-      const x=60+Math.random()*400, y=30+Math.random()*200;
-      g.globalAlpha=.10;
-      g.strokeStyle="#31160a";
-      for(let r=3;r<14;r+=3.5){ g.beginPath(); g.ellipse(x,y,r*1.5,r,0,0,7); g.stroke(); }
-    }
-    g.globalAlpha=1;
+    const grain=g.createLinearGradient(0,0,0,256);
+    grain.addColorStop(0,"#4a2a20");
+    grain.addColorStop(.48,"#523024");
+    grain.addColorStop(1,"#49281e");
+    g.fillStyle=grain; g.fillRect(0,0,512,256);
     const t=new THREE.CanvasTexture(c);
-    t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(3,1.6); t.encoding=THREE.sRGBEncoding;
+    t.encoding=THREE.sRGBEncoding;
     return t;
   }
-  function brushedMetalTexture(){
-    const c=document.createElement("canvas"); c.width=256; c.height=256;
-    const g=c.getContext("2d");
-    g.fillStyle="#283040"; g.fillRect(0,0,256,256);
-    for(let y=0;y<256;y++){
-      g.globalAlpha=.08+Math.random()*.12;
-      g.strokeStyle = y%5===0 ? "#6d7689" : "#1c2330";
-      g.beginPath(); g.moveTo(0,y); g.lineTo(256,y+Math.random()*1.5); g.stroke();
-    }
-    g.globalAlpha=1;
-    const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(2.4,1.2); t.encoding=THREE.sRGBEncoding; return t;
-  }
-  const metalMap = brushedMetalTexture();
 
   const desk = new THREE.Mesh(
     new THREE.BoxGeometry(26, 0.4, 8),
@@ -112,11 +86,11 @@ window.initCatScene = function(){
   desk.position.y = -0.2; desk.receiveShadow = true; scene.add(desk);
 
   const laptop = new THREE.Group();
-  const aluMat = new THREE.MeshStandardMaterial({ map:metalMap, color:0x343d4e, roughness:0.38, metalness:0.78, bumpMap:metalMap, bumpScale:0.01 });
+  const aluMat = new THREE.MeshStandardMaterial({ color:0x343d4e, roughness:0.5, metalness:0.55 });
 
   const base = new THREE.Mesh(new THREE.BoxGeometry(2.15, 0.14, 1.5), aluMat);
   base.position.y = 0.09; base.castShadow = true; base.receiveShadow = true; laptop.add(base);
-  const deck = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.02, 1.38), new THREE.MeshStandardMaterial({ map:metalMap, color:0x404a5f, roughness:0.42, metalness:0.62, bumpMap:metalMap, bumpScale:0.006 }));
+  const deck = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.02, 1.38), new THREE.MeshStandardMaterial({ color:0x404a5f, roughness:0.5, metalness:0.5 }));
   deck.position.y = 0.161; laptop.add(deck);
 
   function keebTexture(){
@@ -127,7 +101,9 @@ window.initCatScene = function(){
     const cols=14, rows=5, kw=15, kh=21, gap=3, ox=8, oy=6;
     for(let r=0;r<rows;r++)for(let cc=0;cc<cols;cc++){ roundRect(g,ox+cc*(kw+gap),oy+r*(kh+gap),kw,kh,3); g.fill(); }
     roundRect(g,72,oy+5*(kh+gap)-1,108,17,3); g.fill();
-    const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding; return t;
+    const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding;
+    t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
+    return t;
   }
   const keeb = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 0.82), new THREE.MeshStandardMaterial({ map:keebTexture(), roughness:0.7 }));
   keeb.rotation.x = -Math.PI/2; keeb.position.set(0, 0.172, -0.12); laptop.add(keeb);
@@ -785,21 +761,44 @@ window.initCatScene = function(){
     }
   }
 
-  function loop(){
+  let running = false;
+  let frameId = 0;
+  let lastFrame = 0;
+  let onScreen = false;
+
+  function loop(timestamp){
+    if(!running) return;
+    frameId = requestAnimationFrame(loop);
+    if(timestamp - lastFrame < 1000 / 30) return;
+    lastFrame = timestamp;
     const dt=Math.min(clock.getDelta(),0.05);
     updateCat(dt);
-    if(!reduce){
-      const now=clock.elapsedTime;
-      camera.position.x=1.0+Math.sin(now*0.24)*0.28;
-      camera.position.y=1.35+Math.sin(now*0.33)*0.1;
-      camera.lookAt(0,0.55,0);
-    } else {
-      camera.position.set(1.0,1.35,6.1);
-      camera.lookAt(0,0.55,0);
-    }
     renderer.render(scene,camera);
-    requestAnimationFrame(loop);
   }
-  loop();
+
+  function syncRendering(){
+    const shouldRun = onScreen && !document.hidden;
+    if(shouldRun === running) return;
+    running = shouldRun;
+    if(running){
+      clock.getDelta();
+      lastFrame = 0;
+      frameId = requestAnimationFrame(loop);
+    } else {
+      cancelAnimationFrame(frameId);
+    }
+  }
+
+  if("IntersectionObserver" in window){
+    const observer = new IntersectionObserver(entries => {
+      onScreen = entries[0].isIntersecting;
+      syncRendering();
+    });
+    observer.observe(canvas);
+  } else {
+    onScreen = true;
+    syncRendering();
+  }
+  document.addEventListener("visibilitychange", syncRendering);
   return true;
 };

@@ -7,7 +7,7 @@ export interface Dict {
   langs: { tag: string; title: string; sub: string; cats: { c1: string; c2: string; c3: string; c4: string } };
   services: { tag: string; title: string; sub: string; items: { title: string; desc: string }[] };
   projects: { tag: string; title: string; sub: string; featuredLabel: string; viewLabel: string; descs: string[] };
-  contact: { tag: string; title: string; intro: string; robotKicker: string; robotTitle: string; robotDesc: string };
+  contact: { tag: string; title: string; intro: string; robotKicker: string; robotTitle: string; robotDesc: string; show3D: string; pause3D: string };
   footer: { made: string; and: string; catcredit: string };
 }
 
@@ -66,6 +66,8 @@ export const I18N: Record<Lang, Dict> = {
       robotKicker: "Hablemos",
       robotTitle: "¿Construimos algo juntos?",
       robotDesc: "Escríbeme por el canal que prefieras. Traigo tus ideas a la vida con backend sólido, buen diseño y un toque de 3D.",
+      show3D: "Ver robot en 3D",
+      pause3D: "Cerrar 3D",
     },
     footer: { made: "Hecho con", and: "y", catcredit: "Gato 3D: “Toon Cat FREE” de" },
   },
@@ -123,6 +125,8 @@ export const I18N: Record<Lang, Dict> = {
       robotKicker: "Say hi",
       robotTitle: "Shall we build something?",
       robotDesc: "Reach out on whichever channel you like. I bring ideas to life with solid backend, good design and a touch of 3D.",
+      show3D: "View robot in 3D",
+      pause3D: "Close 3D",
     },
     footer: { made: "Made with", and: "and", catcredit: "3D cat: “Toon Cat FREE” by" },
   },
