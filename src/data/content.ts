@@ -20,6 +20,12 @@ export const PROJECTS = [
   { name: "Commit Ecosystem", image: "/projects/ecommit.png", tags: ["Git", "Visualización", "Commits"] },
   { name: "Wedwell", image: "/projects/wedwell.png", tags: ["Web", "Bodas", "Planificación"] },
   { name: "RAG", image: "/projects/rag.png", tags: ["IA", "RAG", "Documentos"] },
+  {
+    name: "OloHeart",
+    image: "/projects/oloheart.png",
+    tags: ["Python", "OpenGL", "MediaPipe"],
+    url: "https://github.com/Silent343/Oloheart",
+  },
 ];
 
 export const TOOLGROUPS: { cat: "c1" | "c2" | "c3" | "c4"; items: [string, string, boolean?][] }[] = [

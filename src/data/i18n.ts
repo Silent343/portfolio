@@ -58,6 +58,7 @@ export const I18N: Record<Lang, Dict> = {
         "Visualización interactiva de un ecosistema de commits.",
         "Aplicación web para centralizar el seguimiento de bodas y visualizar el avance de su planificación.",
         "Aplicación de Retrieval-Augmented Generation para consultar documentos con respuestas basadas en contexto relevante.",
+        "Estación de trabajo nativa de anatomía cardíaca 3D, controlable con manos, mouse o teclado.",
       ],
     },
     contact: {
@@ -117,6 +118,7 @@ export const I18N: Record<Lang, Dict> = {
         "Interactive visualization of a commit ecosystem.",
         "Web application for centralizing wedding tracking and visualizing planning progress.",
         "Retrieval-Augmented Generation application for querying documents with context-grounded answers.",
+        "Native 3D cardiac-anatomy workstation controllable with hands, mouse, or keyboard.",
       ],
     },
     contact: {

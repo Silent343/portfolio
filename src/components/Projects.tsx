@@ -15,7 +15,7 @@ export default function Projects() {
           {PROJECTS.map((proj, i) => (
             <a
               key={proj.name}
-              href={CONFIG.github}
+              href={proj.url ?? CONFIG.github}
               target="_blank"
               rel="noopener noreferrer"
               data-reveal
