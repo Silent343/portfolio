@@ -26,6 +26,11 @@ export const PROJECTS = [
     tags: ["Python", "OpenGL", "MediaPipe"],
     url: "https://github.com/Silent343/Oloheart",
   },
+  {
+    name: "Ark",
+    image: "/projects/ark.png",
+    tags: ["3D", "Arquitectura", "Interactivo"],
+  },
 ];
 
 export const TOOLGROUPS: { cat: "c1" | "c2" | "c3" | "c4"; items: [string, string, boolean?][] }[] = [
